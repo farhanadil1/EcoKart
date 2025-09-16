@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,3 +69,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+=======
+# EcoKart
+EcoKart is an eco-friendly product selling web app built with React &amp; Tailwind CSS. It offers sustainable products in categories like Skincare, Household, Baby Care, and Personal Care. Features include a product carousel, reviews, cart system, and responsive design for seamless shopping.
+>>>>>>> 9bd990c785cc016ecd63d5858ef24acb13725a75
