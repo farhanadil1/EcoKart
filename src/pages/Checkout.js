@@ -42,7 +42,7 @@ const Checkout = () => {
     ['name', 'email', 'address', 'phone', 'paymentMethod'].forEach((field) => {
       if (!formData[field]) newErrors[field] = 'Fill your shipping details';
     });
-    
+
     if (!formData.paymentMethod) {
       newErrors.paymentMethod = 'Choose your payment method';
     }
@@ -132,7 +132,7 @@ const Checkout = () => {
                     htmlFor={field}
                     className={`absolute left-3 text-sm text-gray-500 transition-all ${
                       formData[field]
-                        ? 'top-0 text-[10px] text-gray-600'
+                        ? 'top-0 text-[9px] text-gray-600'
                         : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
                     }`}
                   >
@@ -193,7 +193,7 @@ const Checkout = () => {
                       htmlFor={field}
                       className={`absolute left-3 text-sm text-gray-500 transition-all ${
                         formData[field]
-                          ? 'top-0 text-[10px] text-gray-600'
+                          ? 'top-0 text-[9px] text-gray-600'
                           : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
                       }`}
                     >
@@ -220,7 +220,7 @@ const Checkout = () => {
                   htmlFor="upiId"
                   className={`absolute left-3 text-sm text-gray-500 transition-all ${
                     formData.upiId
-                      ? 'top-0 text-[10px] text-gray-600'
+                      ? 'top-0 text-[9px] text-gray-600'
                       : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
                   }`}
                 >
@@ -245,7 +245,7 @@ const Checkout = () => {
                   htmlFor="bankName"
                   className={`absolute left-3 text-sm text-gray-500 transition-all ${
                     formData.bankName
-                      ? 'top-0 text-[10px] text-gray-600'
+                      ? 'top-0 text-[9px] text-gray-600'
                       : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
                   }`}
                 >
