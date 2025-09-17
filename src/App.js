@@ -11,6 +11,7 @@ import NProgress from 'nprogress';
 import Cart from './pages/Cart';
 import CheckoutPage from './pages/Checkout';
 import TrackOrder from './pages/TrackOrder';
+import AllProductsPage from './pages/AllProductsPage';
 
 
 const RouteChangeTracker = () => {
@@ -38,6 +39,7 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<CheckoutPage />} />
         <Route path='/track-order' element={<TrackOrder />} />
+        <Route path='/all-products' element={<AllProductsPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
       </Routes>
     </Router>

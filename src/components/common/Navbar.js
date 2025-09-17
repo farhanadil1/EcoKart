@@ -13,7 +13,7 @@ const Navbar = () => {
 
  const menuItems = [
   { name: "Home", link: "/home" },
-  { name: "Categories", link: "/category" },
+  { name: "Products", link: "/all-products" },
   { name: "Skin & Body Care", link: "/category/skincare" },       
   { name: "Household", link: "/category/household" },
   { name: "Baby Care", link: "/category/baby care" },
@@ -103,11 +103,12 @@ const Navbar = () => {
           </div>
 
           <FiUser className="cursor-pointer" />
-
+            <Link to={`/cart`}>
           <div className="relative cursor-pointer">
-           <Link to={`/cart`}><FiShoppingCart /></Link>
+           <FiShoppingCart />
             <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full border border-white" />
           </div>
+          </Link>
 
           {/* Hamburger for Mobile */}
           <button

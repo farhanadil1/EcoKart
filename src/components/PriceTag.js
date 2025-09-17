@@ -22,7 +22,7 @@ export default function PriceTag() {
                         10% Off
                         </div>
                     </div>
-                    <div className="mt-2 text-xs text-gray-400">(incl. of all taxes)</div>
+                    <div className="mt-2 text-xs text-gray-400">(exclusive of all taxes)</div>
                     </div>
     </div>
   )

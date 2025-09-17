@@ -30,8 +30,10 @@ const Category = () => {
               <div className="mt-4 cursor-pointer">
                 <div className="relative inline-block">
                   <h2 className="text-sm text-center relative">
+                    <a href={cat.link}>
                     {cat.name}
                     <span className="absolute left-0 top-full w-0 h-[1.5px] bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
                   </h2>
                 </div>
               </div>

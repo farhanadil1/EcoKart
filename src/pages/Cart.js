@@ -62,17 +62,30 @@ const Cart = () => {
     <div>
       <RotatingBanner />
       <Navbar />
-      <div className="grid font-poppins mx-10 mt-16 mb-16 grid-cols-1 lg:grid-cols-3">
+      <div className="grid font-poppins mx-10 mt-10 mb-16 grid-cols-1 lg:grid-cols-3">
         {/* Left Section: Cart Items */}
         <div className="lg:col-span-2">
           <h1 className="text-4xl font-semibold text-[#0d2d1e]">Shopping Cart</h1>
 
-          <div className="border border-gray-300 mt-6 py-10 px-6 rounded-xl bg-white">
+          <div className="border border-gray-300 mt-6 py-4 px-6 rounded bg-white">
             {cartItems.length === 0 ? (
-              <p className="text-center text-gray-500">Your cart is empty.</p>
+              <div>
+              <p className="text-center font-bold text-gray-500">
+                Your cart is empty.
+                <div className="mt-10 flex justify-center">
+                  <Link to={`/category`}>
+                    <button className="bg-primary text-white px-6 py-3 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
+                      Shop Now
+                    </button>
+                  </Link>
+                </div>
+              </p>
+              
+              </div>
+              
             ) : (
               <>
-                <div className="grid grid-cols-3 font-semibold text-gray-700 border-b border-gray-300">
+                <div className="grid grid-cols-3 font-semibold pb-3 text-gray-700 border-b border-gray-300">
                   <div>Product</div>
                   <div className="text-center">Quantity</div>
                   <div className="text-right">Price</div>
@@ -131,36 +144,43 @@ const Cart = () => {
               </>
             )}
           </div>
+           <div className='border border-gray-300 lg:max-w-300 mt-6 h-[100px] lg:h-[180px] shadow rounded'>
+            <img 
+            src='/reward.jpg'
+            alt='coupon'
+            className='object-cover w-full h-full'
+            />
+           </div>
         </div>
 
         {/* Right Section: Checkout */}
-        <div className="lg:col-span-1 sm:mt-16 mt-10 lg:px-6 px-0">
-          <div className="sticky top-24 bg-white border border-gray-300 rounded-xl p-6 shadow">
-            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+        <div className="lg:col-span-1 sm:mt-16 mt-6 lg:px-6 px-0">
+          <div className="sticky top-24 bg-white border border-gray-300 rounded p-6 shadow">
+            <h2 className="text-xl font-semibold mb-4 border-b border-gray-300 pb-4">Order Summary</h2>
             <p className="mb-2">Items: {cartItems.length}</p>
 
-            <div className="mb-4">
+            <div className="mb-4 border-b border-gray-300 pb-4">
               <label className="block mb-1 font-medium">Promo Code</label>
               <input
                 type="text"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
-                className="border px-2 py-1 w-full rounded"
+                className="border border-gray-300 px-2 py-1 w-full rounded"
               />
               <button
                 onClick={applyPromoCode}
-                className="mt-2 bg-primary text-white px-4 py-2 rounded"
+                className="mt-2 bg-primary text-white px-4 py-2 rounded "
               >
                 Apply
               </button>
             </div>
 
-            <p className="mb-2">Tax (5%): ₹{taxAmount.toFixed(2)}</p>
+            <p className="mb-2 mt-4 ">Tax (5%): ₹{taxAmount.toFixed(2)}</p>
             <p className="mb-2">Shipping: ₹{shippingFee.toFixed(2)}</p>
             {discount > 0 && (
               <p className="mb-2 text-green-600">Promo Discount: −₹{promoDiscountAmount.toFixed(2)}</p>
             )}
-            <p className="text-xl font-bold">Final Total: ₹{finalTotal.toFixed(2)}</p>
+            <p className="text-xl font-semibold">Final Total: ₹{finalTotal.toFixed(2)}</p>
 
             <Link to={`/checkout`}>
               <button className="w-full bg-primary text-white py-3 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4">

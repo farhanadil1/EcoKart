@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import RotatingBanner from '../components/common/RotatingBanner';
@@ -7,68 +7,176 @@ import RotatingBanner from '../components/common/RotatingBanner';
 const TrackOrder = () => {
   const query = new URLSearchParams(useLocation().search);
   const encodedData = query.get('data');
-  const orderData = encodedData
-    ? JSON.parse(decodeURIComponent(encodedData))
-    : JSON.parse(localStorage.getItem('latestOrder'));
 
-  if (!orderData) {
+  const orderList = useMemo(() => {
+    const parsedOrder = encodedData
+      ? [JSON.parse(decodeURIComponent(encodedData))]
+      : JSON.parse(localStorage.getItem('orders')) || [];
+    return [...parsedOrder].reverse();
+  }, [encodedData]);
+
+  const getRandomDeliveryDay = () => {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    return days[Math.floor(Math.random() * days.length)];
+  };
+
+  const [selectedOrderIndex, setSelectedOrderIndex] = useState(null);
+const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), [orderList]);
+
+  if (orderList.length === 0) {
     return (
       <div>
         <Navbar />
-        <div className="font-poppins mx-6 md:mx-10 mt-16 mb-16 text-center">
+        <div className="font-poppins mx-6 md:mx-10 mt-20 mb-16 text-center">
           <h1 className="text-3xl font-semibold text-[#0d2d1e] mb-6">Track Your Order</h1>
           <p className="text-gray-600">No order data found. Please place an order first.</p>
+          <div className="mt-10 flex justify-center">
+            <Link to={`/category`}>
+              <button className="bg-primary text-white px-6 py-2 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
+                Shop Now
+              </button>
+            </Link>
+          </div>
         </div>
         <Footer />
       </div>
     );
   }
 
+  
   return (
     <div>
-    <RotatingBanner />
-    <Navbar />
-      <div className="font-poppins mx-6 md:mx-10 mt-16 mb-16">
-        <h1 className="text-3xl font-semibold text-[#0d2d1e] mb-6">Track Your Order</h1>
+      <RotatingBanner />
+      <Navbar />
+      <div className="font-poppins mx-6 md:mx-10 mt-20 mb-16">
+        <h1 className="text-4xl font-bold text-[#0d2d1e] mb-10 ">Track Your Orders</h1>
 
-        <div className="bg-white p-6 rounded-xl border shadow space-y-6">
-          {/* Order Status */}
-          <div className="space-y-2">
-            <p><strong>Order ID:</strong> {orderData.orderNumber}</p>
-            <p><strong>Status:</strong> <span className="text-green-600">Order Received</span></p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {orderList.map((orderData, index) => (
+            <div key={index} className="bg-white rounded border border-gray-200 shadow-md overflow-hidden">
+              <div className="p-6 space-y-4">
+                {/* Order Summary */}
+                <div className="flex justify-between items-center border-b pb-3">
+                  <div>
+                    <p className="text-sm text-gray-500">Order ID</p>
+                    <p className="text-base font-semibold text-gray-800">{orderData.orderNumber}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">Status</p>
+                    <p className="text-sm font-medium text-green-600">Order Received</p>
+                    <p className="text-xs text-gray-500">
+                      Est. Delivery: <span className="text-green-600">{deliveryDays[index]}</span>
+                    </p>
+                  </div>
+                </div>
 
-          {/* Customer Info */}
-          <div className="space-y-2">
-            <h2 className="text-xl font-semibold">Customer Details</h2>
-            <p><strong>Name:</strong> {orderData.user.name}</p>
-            <p><strong>Email:</strong> {orderData.user.email}</p>
-            <p><strong>Phone:</strong> {orderData.user.phone}</p>
-            <p><strong>Address:</strong> {orderData.user.address}</p>
-          </div>
+                {/* Product Preview */}
+                <div className="space-y-3">
+                  {orderData.items.map(item => (
+                    <div key={item.id} className="flex items-center gap-4">
+                      <img
+                        src={item.imageUrl || '/placeholder.png'}
+                        alt={item.name}
+                        className="w-16 h-16 object-cover rounded border"
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-800">{item.name}</p>
+                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        <p className="text-sm text-gray-700 font-semibold">
+                          ₹{(item.priceINR * item.quantity).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-          {/* Item List */}
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Items Ordered</h2>
-            <ul className="list-disc ml-6 text-gray-800 space-y-1">
-              {orderData.items.map(item => (
-                <li key={item.id}>
-                  {item.name} × {item.quantity} — ₹{(item.priceINR * item.quantity).toFixed(2)}
-                </li>
-              ))}
-            </ul>
-          </div>
+                {/* View More Button */}
+                <button
+                  onClick={() => setSelectedOrderIndex(index)}
+                  className="text-primary text-sm font-medium hover:underline"
+                >
+                  View More
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Pricing Breakdown */}
-          <div className="space-y-1 text-right text-gray-800">
-            <p>Subtotal: ₹{orderData.subtotal.toFixed(2)}</p>
-            <p>Tax (18%): ₹{orderData.taxAmount.toFixed(2)}</p>
-            <p>Shipping: ₹{orderData.shippingFee.toFixed(2)}</p>
-            {orderData.promoDiscountAmount > 0 && (
-              <p className="text-green-600">Promo Discount: −₹{orderData.promoDiscountAmount.toFixed(2)}</p>
-            )}
-            <p className="font-bold text-xl mt-2">Total: ₹{orderData.finalTotal.toFixed(2)}</p>
-          </div>
+        {/* Modal */}
+       {selectedOrderIndex !== null && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+    onClick={() => setSelectedOrderIndex(null)}
+  >
+    <div
+      className="bg-white rounded p-6 shadow-2xl max-w-xl w-full space-y-6 relative overflow-y-auto max-h-[90vh] animate-fadeIn"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        onClick={() => setSelectedOrderIndex(null)}
+        className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
+      >
+        &times;
+      </button>
+
+      <h2 className="text-2xl font-bold text-green-600">Order Details</h2>
+
+      <div className="space-y-2 text-sm text-gray-700">
+        <p><strong>Order ID:</strong> {orderList[selectedOrderIndex].orderNumber}</p>
+        <p><strong>Status:</strong> <span className="text-green-600">Order Received</span></p>
+        <p><strong>Est. Delivery:</strong> <span className="text-green-600">{deliveryDays[selectedOrderIndex]}</span></p>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">Items</h3>
+        <ul className="space-y-3 text-gray-800 text-sm">
+          {orderList[selectedOrderIndex].items.map(item => (
+            <li key={item.id} className="flex items-center gap-4 border-b pb-2">
+              <img
+                src={item.imageUrl || '/placeholder.png'}
+                alt={item.name}
+                className="w-14 h-14 object-cover rounded-md border"
+              />
+              <div className="flex-1">
+                <p className="font-medium">{item.name}</p>
+                <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                <p className="text-sm font-semibold">₹{(item.priceINR * item.quantity).toFixed(2)}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="border-t pt-4 space-y-1 text-sm text-gray-700">
+        <h3 className="font-semibold text-gray-800 mb-1">Customer Details</h3>
+        <p><strong>Name:</strong> {orderList[selectedOrderIndex].user.name}</p>
+        <p><strong>Email:</strong> {orderList[selectedOrderIndex].user.email}</p>
+        <p><strong>Phone:</strong> {orderList[selectedOrderIndex].user.phone}</p>
+        <p><strong>Address:</strong> {orderList[selectedOrderIndex].user.address}</p>
+      </div>
+
+      <div className="border-t pt-4 text-right space-y-1 text-sm text-gray-800">
+        <p>Subtotal: ₹{orderList[selectedOrderIndex].subtotal.toFixed(2)}</p>
+        <p>Tax (18%): ₹{orderList[selectedOrderIndex].taxAmount.toFixed(2)}</p>
+        <p>Shipping: ₹{orderList[selectedOrderIndex].shippingFee.toFixed(2)}</p>
+        {orderList[selectedOrderIndex].promoDiscountAmount > 0 && (
+          <p className="text-green-600">
+            Promo Discount: −₹{orderList[selectedOrderIndex].promoDiscountAmount.toFixed(2)}
+          </p>
+        )}
+        <p className="font-bold text-lg pt-2">Total: ₹{orderList[selectedOrderIndex].finalTotal.toFixed(2)}</p>
+      </div>
+    </div>
+  </div>
+)}
+
+
+        <div className="mt-12 flex justify-center">
+          <Link to={`/home`}>
+            <button className="bg-primary text-white px-6 py-3 rounded-md font-semibold hover:bg-white hover:text-primary hover:border hover:border-primary transition duration-300">
+               Continue Shopping
+            </button>
+          </Link>
         </div>
       </div>
       <Footer />

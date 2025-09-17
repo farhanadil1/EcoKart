@@ -163,10 +163,10 @@
     "imageUrl": "/images/products/household1.jpg",
     "ecoFriendly": true,
     "specifications": {
-      "Net Quantity": "500 ml",
+      "Net Quantity": "100 gm",
       "Shelf Life": "36 months",
       "Country of Origin": "India",
-      "Usage Instructions": "Use 2-3 drops per wash."
+      "Usage Instructions": "Rub the brush on Soap then use it."
     },
     "rating": 4.5,
     "reviewsCount": 325
@@ -420,7 +420,7 @@
     "reviewsCount": 382
   },
   {
-  "id": 25,
+  "id": 29,
   "category": "Baby Care",
   "name": "Natural Baby Moisturizer",
   "shortDescription": "Plant-based moisturizer for soft and healthy baby skin.",
@@ -439,7 +439,7 @@
   "reviewsCount": 520
   },
   {
-  "id": 26,
+  "id": 30,
   "category": "Baby Care",
   "name": "Organic Baby Bottle Cleaner",
   "shortDescription": "Eco-friendly cleaner specifically designed for baby bottles and accessories.",
@@ -573,7 +573,7 @@
     "reviewsCount": 710
   },
   {
-  "id": 28,
+  "id": 31,
   "category": "Personal Care",
   "name": "Plant-Based Hand Cream",
   "shortDescription": "Nourishing hand cream made from natural oils for soft, moisturized hands.",
@@ -592,7 +592,7 @@
   "reviewsCount": 478
   },
   {
-  "id": 29,
+  "id": 32,
   "category": "Personal Care",
   "name": "Organic Coconut Body Lotion",
   "shortDescription": "Moisturizing body lotion made from organic coconut oil.",
