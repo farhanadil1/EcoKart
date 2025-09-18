@@ -6,6 +6,9 @@ import products from "../../data/products.json"
 const bestSellerIds = [19, 13, 7, 2];
 
 const Navbar = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searched, setSearched] = useState(products.filter(product => bestSellerIds.includes(product.id)));
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchRef = useRef(null);
@@ -32,9 +35,28 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const handleSearch = (e) => {
+  const query = e.target.value;
+  setSearchQuery(query);
+
+  if (!query.trim()) {
+    // Show bestsellers if input is empty
+    setSearched(products.filter(product => bestSellerIds.includes(product.id)));
+  } else {
+    // Filter products by name or description
+    const filtered = products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(query.toLowerCase()) ||
+        (product.shortDescription && product.shortDescription.toLowerCase().includes(query.toLowerCase())) ||
+        (product.description && product.description.toLowerCase().includes(query.toLowerCase()))
+    );
+    setSearched(filtered);
+  }
+};
+
   
  
-  const searched = products.filter(product => bestSellerIds.includes(product.id));
+  
 
 
 
@@ -71,35 +93,36 @@ const Navbar = () => {
 
             {/* Dropdown */}
             {isSearchOpen && (
-              <div className="absolute right-0 mt-2 h-30 z-50 focus:border-0 w-64 bg-white shadow-lg animate-slide-down">
+              <div className="absolute right-0 mt-2 z-50 w-64 bg-white shadow-lg animate-slide-down">
                 <input
                   type="text"
                   placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={handleSearch}
                   className="w-full p-2 border text-sm border-gray-400"
                 />
-                {searched.map((product) => (
-                  <Link key={product.id} to={`/product/${product.id}`}>
-                    <div className="flex p-1 hover:bg-pageBg  text-gray-800 items-center space-x-2">
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        className="w-20 h-20 object-cover"
-                        onError={(e) => (e.target.src = '/images/placeholder.png')}
-                      />
-                      <div>
-                        <h2 className="font-medium text-sm w-20 sm:w-full">
-                          {product.name}
-                        </h2>
-                        <h3 className="text-xs">
-                          {product.shortDescription || product.description}
-                        </h3>
+                
+                <div className="max-h-[22rem] overflow-y-auto">
+                  {searched.map((product) => (
+                    <Link key={product.id} to={`/product/${product.id}`}>
+                      <div className="flex p-1 hover:bg-pageBg text-gray-800 items-center space-x-2">
+                        <img
+                          src={product.imageUrl}
+                          alt={product.name}
+                          className="w-20 h-20 object-cover"
+                          onError={(e) => (e.target.src = '/images/placeholder.png')}
+                        />
+                        <div>
+                          <h2 className="font-medium text-sm w-20 sm:w-full">{product.name}</h2>
+                          <h3 className="text-xs">{product.shortDescription || product.description}</h3>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
-
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
+
           </div>
 
           <FiUser className="cursor-pointer" />
