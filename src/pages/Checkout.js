@@ -5,6 +5,7 @@ import Footer from '../components/common/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import RotatingBanner from '../components/common/RotatingBanner';
 import { FaGooglePay, FaCreditCard, FaUniversity, FaMoneyBillWave } from 'react-icons/fa';
+import { useCart } from './CartContext';
 
 
 const Checkout = () => {
@@ -31,17 +32,35 @@ const Checkout = () => {
     setCartItems(cart);
   }, []);
 
-  const subtotal = cartItems.reduce((total, item) => total + item.priceINR * item.quantity, 0);
-  const taxRate = 0.05;
-  const taxAmount = subtotal * taxRate;
-  const shippingFee = subtotal > 1000 ? 0 : 100;
-  const finalTotal = subtotal + taxAmount + shippingFee;
+   const {
+       
+      subtotal,
+      totalDiscount,
+      taxAmount,
+      shippingFee,
+      finalTotal,
+    } = useCart();
 
   const validateForm = () => {
     const newErrors = {};
     ['name', 'email', 'address', 'phone', 'paymentMethod'].forEach((field) => {
       if (!formData[field]) newErrors[field] = 'Fill your shipping details';
     });
+    // Email validation
+    if (formData.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        newErrors.email = 'Enter a valid email address';
+      }
+    }
+
+    // Phone validation (10 digits, adjust if needed)
+    if (formData.phone) {
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(formData.phone)) {
+        newErrors.phone = 'Enter a valid 10-digit phone number';
+      }
+    }
 
     if (!formData.paymentMethod) {
       newErrors.paymentMethod = 'Choose your payment method';
@@ -52,14 +71,31 @@ const Checkout = () => {
         if (!formData[field]) newErrors[field] = 'Required';
       });
     }
+    if (formData.cardNumber && !/^\d{16}$/.test(formData.cardNumber)) {
+    newErrors.cardNumber = 'Card number must be 16 digits';
+    }
+    if (formData.cardExpiry && !/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.cardExpiry)) {
+      newErrors.cardExpiry = 'Expiry must be in MM/YY format';
+    }
+    if (formData.cardCVV && !/^\d{3}$/.test(formData.cardCVV)) {
+      newErrors.cardCVV = 'CVV must be 3 digits';
+    }
 
-    if (formData.paymentMethod === 'upi' && !formData.upiId) {
+    if (formData.paymentMethod === 'upi') {
+    if (!formData.upiId) {
       newErrors.upiId = 'Required';
+    } else if (!/^[\w.-]+@[\w.-]+$/.test(formData.upiId)) {
+      newErrors.upiId = 'Enter a valid UPI ID (example: username@upi)';
     }
+  }
 
-    if (formData.paymentMethod === 'netBanking' && !formData.bankName) {
+  if (formData.paymentMethod === 'netBanking') {
+    if (!formData.bankName) {
       newErrors.bankName = 'Required';
+    } else if (formData.bankName.length < 3) {
+      newErrors.bankName = 'Enter a valid bank name';
     }
+      }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -99,8 +135,7 @@ const Checkout = () => {
   };
 
   const handleTrackOrder = () => {
-    const encoded = encodeURIComponent(JSON.stringify(invoice));
-    navigate(`/track-order?data=${encoded}`);
+    navigate('/track-order');
   };
 
   return (
@@ -108,7 +143,7 @@ const Checkout = () => {
       <RotatingBanner />
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-10">
         <h1 className="text-3xl font-semibold font-poppins text-primary mb-8">Checkout</h1>
 
         <div className="grid gap-10 lg:grid-cols-3">
@@ -130,7 +165,7 @@ const Checkout = () => {
                   />
                   <label
                     htmlFor={field}
-                    className={`absolute left-3 text-sm text-gray-500 transition-all ${
+                    className={`absolute left-3 text-sm text-gray-500 transition-all pointer-events-none ${
                       formData[field]
                         ? 'top-0 text-[9px] text-gray-600'
                         : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
@@ -191,7 +226,7 @@ const Checkout = () => {
                     />
                     <label
                       htmlFor={field}
-                      className={`absolute left-3 text-sm text-gray-500 transition-all ${
+                      className={`absolute left-3 text-sm text-gray-500 transition-all pointer-events-none ${
                         formData[field]
                           ? 'top-0 text-[9px] text-gray-600'
                           : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
@@ -218,7 +253,7 @@ const Checkout = () => {
                 />
                 <label
                   htmlFor="upiId"
-                  className={`absolute left-3 text-sm text-gray-500 transition-all ${
+                  className={`absolute left-3 text-sm text-gray-500 transition-all pointer-events-none ${
                     formData.upiId
                       ? 'top-0 text-[9px] text-gray-600'
                       : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
@@ -237,7 +272,7 @@ const Checkout = () => {
                   name="bankName"
                   value={formData.bankName}
                   onChange={handleChange}
-                  className={`w-full border px-3 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary ${
+                  className={`w-full border px-3 py-3 rounded-md focus:outline-none focus:ring-2 pointer-events-none focus:ring-primary ${
                     errors.bankName ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
@@ -306,6 +341,10 @@ const Checkout = () => {
 
             <hr className="my-4" />
 
+              <div className="flex justify-between text-green-500">
+                <span>Discount</span>
+                <span>₹{totalDiscount.toFixed(2)}</span>
+              </div>
             <div className="space-y-2 text-gray-700">
               <div className="flex justify-between">
                 <span>Subtotal</span>

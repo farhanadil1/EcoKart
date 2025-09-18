@@ -28,14 +28,11 @@ code {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #375534; 
+  background-color: #7abd74; 
 }
 
-.custom-card {
-  clip-path: path("M40 0 H360 A40 40 0 0 1 400 40 V320 A40 40 0 0 1 360 360 H320 A40 40 0 0 0 280 400 A40 40 0 0 1 240 440 H40 A40 40 0 0 1 0 400 V40 A40 40 0 0 1 40 0 Z");
-}
 /* Hide horizontal scrollbar globally */
-::-webkit-scrollbar {
+::-webkit-scrollbar:horizontal {
   display: none;
 }
 

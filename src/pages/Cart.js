@@ -1,62 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { getCart, removeFromCart, updateQuantity } from './CartUtils';
-import products from '../data/products.json';
+import React, { useState } from 'react';
 import RotatingBanner from '../components/common/RotatingBanner';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { Link } from 'react-router-dom';
+import { useCart } from './CartContext';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [promoCode, setPromoCode] = useState('');
-  const [discount, setDiscount] = useState(0);
+  const [promoCode, setPromoCode] = useState("");
+  const {
+     cartItems,
+    handleRemove,
+    handleQuantityChange,
+    applyPromoCode,
+    subtotal,
+    totalDiscount,
+    promoDiscountAmount,
+    taxAmount,
+    shippingFee,
+    finalTotal,
+  } = useCart();
 
-  const loadCart = () => {
-    const cart = getCart();
-    const cartWithDetails = cart.map(cartItem => {
-      const product = products.find(p => p.id === cartItem.id);
-      if (!product) return null;
-      return {
-        ...product,
-        quantity: cartItem.quantity
-      };
-    }).filter(Boolean);
-    setCartItems(cartWithDetails);
-  };
-
-  useEffect(() => {
-    loadCart();
-  }, []);
-
-  const handleRemove = (id) => {
-    removeFromCart(id);
-    loadCart();
-  };
-
-  const handleQuantityChange = (id, delta) => {
-    updateQuantity(id, delta);
-    loadCart();
-  };
-
-  const applyPromoCode = () => {
-    if (promoCode === 'SAVE10') {
-      setDiscount(0.10);
-    } else {
-      setDiscount(0);
-      alert('Invalid promo code');
-    }
-  };
-
-  const subtotal = cartItems.reduce(
-    (total, item) => total + ((item.priceINR - item.priceINR * 0.10) * item.quantity),
-    0
-  );
-
-  const taxRate = 0.05;
-  const taxAmount = subtotal * taxRate;
-  const shippingFee = subtotal > 500 ? 0 : 100;
-  const promoDiscountAmount = subtotal * discount;
-  const finalTotal = subtotal + taxAmount + shippingFee - promoDiscountAmount;
+  
 
   return (
     <div>
@@ -168,7 +132,7 @@ const Cart = () => {
                 className="border border-gray-300 px-2 py-1 w-full rounded"
               />
               <button
-                onClick={applyPromoCode}
+                onClick={() => applyPromoCode(promoCode)}
                 className="mt-2 bg-primary text-white px-4 py-2 rounded "
               >
                 Apply
@@ -177,7 +141,8 @@ const Cart = () => {
 
             <p className="mb-2 mt-4 ">Tax (5%): ₹{taxAmount.toFixed(2)}</p>
             <p className="mb-2">Shipping: ₹{shippingFee.toFixed(2)}</p>
-            {discount > 0 && (
+            <p className="mb-2 text-green-600">Discount: ₹{totalDiscount.toFixed(2)}</p>
+            {promoDiscountAmount > 0 && (
               <p className="mb-2 text-green-600">Promo Discount: −₹{promoDiscountAmount.toFixed(2)}</p>
             )}
             <p className="text-xl font-semibold">Final Total: ₹{finalTotal.toFixed(2)}</p>

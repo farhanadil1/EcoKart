@@ -13,15 +13,17 @@ import { LuIndianRupee } from "react-icons/lu";
 import BestSeller from '../components/home/BestSeller';
 import Free from '../components/common/Free';
 import Reviews from '../components/home/Reviews';
-import { addToCart } from './CartUtils';
+import { useCart } from './CartContext';
 
 const ProductPage = () => {
+    const { addToCart } = useCart();
     const [alertMessage, setAlertMessage] = useState('');
 
     const {id} = useParams();
     const product = products.find(p => p.id === parseInt(id));
     if(!product) return <p>Product Not Found.</p>
 
+    
 
   return (
     <div>

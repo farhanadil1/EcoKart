@@ -3,8 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import RotatingBanner from '../components/common/RotatingBanner';
+import { useCart } from './CartContext';
 
 const TrackOrder = () => {
+
+   const { subtotal, baseDiscountAmount, totalDiscount, promoDiscountAmount, taxAmount, shippingFee, finalTotal } = useCart();
+
+
   const query = new URLSearchParams(useLocation().search);
   const encodedData = query.get('data');
 
@@ -48,7 +53,7 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
     <div>
       <RotatingBanner />
       <Navbar />
-      <div className="font-poppins mx-6 md:mx-10 mt-20 mb-16">
+      <div className="font-poppins mx-6 md:mx-10 mt-10 mb-16">
         <h1 className="text-4xl font-bold text-[#0d2d1e] mb-10 ">Track Your Orders</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -83,7 +88,7 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
                         <p className="font-medium text-gray-800">{item.name}</p>
                         <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                         <p className="text-sm text-gray-700 font-semibold">
-                          ₹{(item.priceINR * item.quantity).toFixed(2)}
+                          ₹{finalTotal.toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -131,7 +136,7 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
         <h3 className="text-lg font-semibold text-gray-800 mb-2">Items</h3>
         <ul className="space-y-3 text-gray-800 text-sm">
           {orderList[selectedOrderIndex].items.map(item => (
-            <li key={item.id} className="flex items-center gap-4 border-b pb-2">
+            <li key={item.id} className="flex items-center gap-4 pb-2">
               <img
                 src={item.imageUrl || '/placeholder.png'}
                 alt={item.name}
@@ -140,7 +145,7 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
               <div className="flex-1">
                 <p className="font-medium">{item.name}</p>
                 <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                <p className="text-sm font-semibold">₹{(item.priceINR * item.quantity).toFixed(2)}</p>
+                <p className="text-sm font-semibold">₹{finalTotal.toFixed(2)}</p>
               </div>
             </li>
           ))}
@@ -156,15 +161,21 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
       </div>
 
       <div className="border-t pt-4 text-right space-y-1 text-sm text-gray-800">
-        <p>Subtotal: ₹{orderList[selectedOrderIndex].subtotal.toFixed(2)}</p>
-        <p>Tax (18%): ₹{orderList[selectedOrderIndex].taxAmount.toFixed(2)}</p>
-        <p>Shipping: ₹{orderList[selectedOrderIndex].shippingFee.toFixed(2)}</p>
-        {orderList[selectedOrderIndex].promoDiscountAmount > 0 && (
+        <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
+        <p>Tax (5%): ₹{taxAmount.toFixed(2)}</p>
+        <p>Shipping: ₹{shippingFee?.toFixed(2) || "0.00"}</p>
+        <p className="text-green-600">
+            Flat Discount: −₹{baseDiscountAmount.toFixed(2)}
+          </p>
+        {promoDiscountAmount > 0 && (
           <p className="text-green-600">
-            Promo Discount: −₹{orderList[selectedOrderIndex].promoDiscountAmount.toFixed(2)}
+            Promo Discount: −₹{promoDiscountAmount.toFixed(2)}
           </p>
         )}
-        <p className="font-bold text-lg pt-2">Total: ₹{orderList[selectedOrderIndex].finalTotal.toFixed(2)}</p>
+        <p className="text-green-600">
+            Total Discount: −₹{totalDiscount.toFixed(2)}
+          </p>
+        <p className="font-bold text-lg pt-2">Total: ₹{finalTotal.toFixed(2)}</p>
       </div>
     </div>
   </div>
