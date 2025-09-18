@@ -37,7 +37,7 @@ const BestSeller = () => {
                 <Link to={`/product/${product.id}`}>
                 <button
                 onClick={() => addToCart(product)} 
-                className='bg-primary mt-8 text-white hover:bg-white hover:border-2 hover:border-primary  hover:text-black w-full p-2'>View Details</button>
+                className='bg-primary mt-8 border-2 border-primary text-white hover:bg-white hover:border-2 hover:border-primary  hover:text-black w-full p-2'>View Details</button>
                 </Link>
             </div>
           </div>

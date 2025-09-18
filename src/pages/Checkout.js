@@ -292,7 +292,7 @@ const Checkout = () => {
 
             <div className="grid grid-cols-3 gap-4">
               <Link to={`/cart`}>
-                <button className="w-full col-span-1 hover:border-2 text-gray-700 border border-primary py-2 rounded font-semibold shadow">
+                <button className="w-full col-span-1 hover:ring-1 ring-primary text-gray-700 border border-primary py-2 rounded font-semibold shadow">
                   Back to Cart
                 </button>
               </Link>
@@ -423,7 +423,7 @@ const Checkout = () => {
 
     <button
       onClick={handleTrackOrder}
-      className="w-full bg-primary hover:border hover:text-gray-700 hover:bg-white hover:border-primary text-white py-3 rounded font-semibold transition"
+      className="w-full bg-primary border border-primary hover:border hover:text-gray-700 hover:bg-white hover:border-primary text-white py-3 rounded font-semibold transition"
     >
        View Invoice & Track Order
     </button>

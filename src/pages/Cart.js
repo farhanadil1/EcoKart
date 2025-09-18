@@ -38,7 +38,7 @@ const Cart = () => {
                 Your cart is empty.
                 <div className="mt-10 flex justify-center">
                   <Link to={`/category`}>
-                    <button className="bg-primary text-white px-6 py-3 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
+                    <button className="bg-primary border border-primary text-white px-6 py-3 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
                       Shop Now
                     </button>
                   </Link>
@@ -148,7 +148,7 @@ const Cart = () => {
             <p className="text-xl font-semibold">Final Total: ₹{finalTotal.toFixed(2)}</p>
 
             <Link to={`/checkout`}>
-              <button className="w-full bg-primary text-white py-3 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4">
+              <button className="w-full bg-primary border border-primary text-white py-2 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4">
                 Proceed to Checkout
               </button>
             </Link>

@@ -10,7 +10,7 @@ const Free = () => {
             className="object-cover w-full h-full"
             />
           <button
-            className="absolute bottom-24 right-40
+            className="absolute bottom-24 right-40 border-2 border-primary
                         px-2 py-1 text-white bg-primary 
                         hover:border-2 hover:bg-pageBg hover:border-primary hover:text-primary 
                         sm:right-20 sm:px-10 

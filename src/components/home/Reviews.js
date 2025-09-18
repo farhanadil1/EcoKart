@@ -86,7 +86,7 @@ const Reviews = () => {
 
       <div className="mt-10 flex justify-center">
         <Link to={`/category`}>
-        <button className="bg-primary text-white px-6 py-2 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
+        <button className="bg-primary border border-primary text-white px-6 py-2 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
           Shop Now
         </button>
         </Link>

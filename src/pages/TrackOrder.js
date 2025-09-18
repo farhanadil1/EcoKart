@@ -37,7 +37,7 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
           <p className="text-gray-600">No order data found. Please place an order first.</p>
           <div className="mt-10 flex justify-center">
             <Link to={`/category`}>
-              <button className="bg-primary text-white px-6 py-2 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
+              <button className="bg-primary border border-primary text-white px-6 py-2 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
                 Shop Now
               </button>
             </Link>
@@ -178,7 +178,7 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
 
         <div className="mt-12 flex justify-center">
           <Link to={`/home`}>
-            <button className="bg-primary text-white px-6 py-3 rounded-md font-semibold hover:bg-white hover:text-primary hover:border hover:border-primary transition duration-300">
+            <button className="bg-primary border border-primary text-white px-6 py-3 rounded font-semibold hover:bg-white hover:text-primary hover:border hover:border-primary transition duration-300">
                Continue Shopping
             </button>
           </Link>
