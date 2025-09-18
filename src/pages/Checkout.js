@@ -272,13 +272,13 @@ const Checkout = () => {
                   name="bankName"
                   value={formData.bankName}
                   onChange={handleChange}
-                  className={`w-full border px-3 py-3 rounded-md focus:outline-none focus:ring-2 pointer-events-none focus:ring-primary ${
+                  className={`w-full border px-3 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary ${
                     errors.bankName ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
                 <label
                   htmlFor="bankName"
-                  className={`absolute left-3 text-sm text-gray-500 transition-all ${
+                  className={`absolute left-3 text-sm text-gray-500 transition-all pointer-events-none ${
                     formData.bankName
                       ? 'top-0 text-[9px] text-gray-600'
                       : 'top-1/2 -translate-y-1/2 text-sm text-gray-400'
