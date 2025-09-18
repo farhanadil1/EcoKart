@@ -114,7 +114,7 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
     onClick={() => setSelectedOrderIndex(null)}
   >
     <div
-      className="bg-white rounded p-6 shadow-2xl max-w-xl w-full space-y-6 relative overflow-y-auto max-h-[90vh] animate-fadeIn"
+      className="bg-white rounded p-6 shadow-2xl max-w-xl w-full relative animate-fadeIn max-h-[90vh] flex flex-col"
       onClick={(e) => e.stopPropagation()}
     >
       <button
@@ -124,63 +124,57 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
         &times;
       </button>
 
-      <h2 className="text-2xl font-bold text-green-600">Order Details</h2>
+      <h2 className="text-2xl font-bold text-green-600 mb-4">Order Details</h2>
 
-      <div className="space-y-2 text-sm text-gray-700">
-        <p><strong>Order ID:</strong> {orderList[selectedOrderIndex].orderNumber}</p>
-        <p><strong>Status:</strong> <span className="text-green-600">Order Received</span></p>
-        <p><strong>Est. Delivery:</strong> <span className="text-green-600">{deliveryDays[selectedOrderIndex]}</span></p>
-      </div>
+      {/* Scrollable content */}
+      <div className="overflow-y-auto custom-scrollbar pr-2 space-y-4 flex-1">
+        <div className="space-y-2 text-sm text-gray-700">
+          <p><strong>Order ID:</strong> {orderList[selectedOrderIndex].orderNumber}</p>
+          <p><strong>Status:</strong> <span className="text-green-600">Order Received</span></p>
+          <p><strong>Est. Delivery:</strong> <span className="text-green-600">{deliveryDays[selectedOrderIndex]}</span></p>
+        </div>
 
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">Items</h3>
-        <ul className="space-y-3 text-gray-800 text-sm">
-          {orderList[selectedOrderIndex].items.map(item => (
-            <li key={item.id} className="flex items-center gap-4 pb-2">
-              <img
-                src={item.imageUrl || '/placeholder.png'}
-                alt={item.name}
-                className="w-14 h-14 object-cover rounded-md border"
-              />
-              <div className="flex-1">
-                <p className="font-medium">{item.name}</p>
-                <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                <p className="text-sm font-semibold">₹{finalTotal.toFixed(2)}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Items</h3>
+          <ul className="space-y-3 text-gray-800 text-sm">
+            {orderList[selectedOrderIndex].items.map(item => (
+              <li key={item.id} className="flex items-center gap-4 pb-2">
+                <img
+                  src={item.imageUrl || '/placeholder.png'}
+                  alt={item.name}
+                  className="w-14 h-14 object-cover rounded-md border"
+                />
+                <div className="flex-1">
+                  <p className="font-medium">{item.name}</p>
+                  <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                  <p className="text-sm font-semibold">₹{finalTotal.toFixed(2)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      <div className="border-t pt-4 space-y-1 text-sm text-gray-700">
-        <h3 className="font-semibold text-gray-800 mb-1">Customer Details</h3>
-        <p><strong>Name:</strong> {orderList[selectedOrderIndex].user.name}</p>
-        <p><strong>Email:</strong> {orderList[selectedOrderIndex].user.email}</p>
-        <p><strong>Phone:</strong> {orderList[selectedOrderIndex].user.phone}</p>
-        <p><strong>Address:</strong> {orderList[selectedOrderIndex].user.address}</p>
-      </div>
+        <div className="border-t pt-4 space-y-1 text-sm text-gray-700">
+          <h3 className="font-semibold text-gray-800 mb-1">Customer Details</h3>
+          <p><strong>Name:</strong> {orderList[selectedOrderIndex].user.name}</p>
+          <p><strong>Email:</strong> {orderList[selectedOrderIndex].user.email}</p>
+          <p><strong>Phone:</strong> {orderList[selectedOrderIndex].user.phone}</p>
+          <p><strong>Address:</strong> {orderList[selectedOrderIndex].user.address}</p>
+        </div>
 
-      <div className="border-t pt-4 text-right space-y-1 text-sm text-gray-800">
-        <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
-        <p>Tax (5%): ₹{taxAmount.toFixed(2)}</p>
-        <p>Shipping: ₹{shippingFee?.toFixed(2) || "0.00"}</p>
-        <p className="text-green-600">
-            Flat Discount: −₹{baseDiscountAmount.toFixed(2)}
-          </p>
-        {promoDiscountAmount > 0 && (
-          <p className="text-green-600">
-            Promo Discount: −₹{promoDiscountAmount.toFixed(2)}
-          </p>
-        )}
-        <p className="text-green-600">
-            Total Discount: −₹{totalDiscount.toFixed(2)}
-          </p>
-        <p className="font-bold text-lg pt-2">Total: ₹{finalTotal.toFixed(2)}</p>
+        <div className="border-t pt-4 text-right space-y-1 text-sm text-gray-800">
+          <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
+          <p>Tax (5%): ₹{taxAmount.toFixed(2)}</p>
+          <p>Shipping: ₹{shippingFee?.toFixed(2) || "0.00"}</p>
+          <p className="text-green-600">Flat Discount: −₹{baseDiscountAmount.toFixed(2)}</p>
+          {promoDiscountAmount > 0 && <p className="text-green-600">Promo Discount: −₹{promoDiscountAmount.toFixed(2)}</p>}
+          <p className="text-green-600">Total Discount: −₹{totalDiscount.toFixed(2)}</p>
+          <p className="font-bold text-lg pt-2">Total: ₹{finalTotal.toFixed(2)}</p>
+        </div>
       </div>
     </div>
   </div>
 )}
-
 
         <div className="mt-12 flex justify-center">
           <Link to={`/home`}>
