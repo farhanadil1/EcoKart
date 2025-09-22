@@ -41,6 +41,7 @@ function App() {
         <Route path='/track-order' element={<TrackOrder />} />
         <Route path='/all-products' element={<AllProductsPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="*" element={<h1 className='text-3xl font-bold text-center mt-20'>404 - Page Not Found</h1>} />
       </Routes>
     </Router>
   );
