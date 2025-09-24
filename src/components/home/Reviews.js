@@ -40,6 +40,11 @@ const Reviews = () => {
 
   return (
     <div className="bg-white py-10 px-4 font-poppins text-[#0d2d1e]">
+      <div className='text-center flex justify-center'>
+        <p className='underline mt-1'>Excellent</p>
+        <div className='underline-offset-0 mb-6 ml-2 text-bold'>{renderStars(5)}</div>
+        <p className='mt-1 ml-2'>Trusted</p>
+      </div>
       <div className="text-2xl md:text-5xl font-medium text-center mb-8">
         Join 100,000+ customers choosing eco-friendly living with Ecokart.
       </div>

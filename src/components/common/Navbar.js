@@ -5,7 +5,7 @@ import products from "../../data/products.json"
 
 const bestSellerIds = [19, 13, 7, 2];
 
-const Navbar = () => {
+const Navbar = ({cartRef}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searched, setSearched] = useState(products.filter(product => bestSellerIds.includes(product.id)));
 
@@ -124,10 +124,11 @@ const Navbar = () => {
             )}
 
           </div>
-
+            <Link to={`/auth`}>
           <FiUser className="cursor-pointer" />
+          </Link>
             <Link to={`/cart`}>
-          <div className="relative cursor-pointer">
+          <div ref={cartRef} className="relative cursor-pointer">
            <FiShoppingCart />
             <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full border border-white" />
           </div>

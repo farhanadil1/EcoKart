@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Free = () => {
   return (
@@ -9,6 +10,7 @@ const Free = () => {
             alt="free-product"
             className="object-cover w-full h-full"
             />
+            <Link to={'/auth'}>
           <button
             className="absolute bottom-24 right-40 border-2 border-primary
                         px-2 py-1 text-white bg-primary 
@@ -20,6 +22,7 @@ const Free = () => {
             >
             Claim Your Free EcoBox
             </button>
+            </Link>
         </a>
     </div>
   )

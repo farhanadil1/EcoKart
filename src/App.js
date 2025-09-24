@@ -12,6 +12,7 @@ import Cart from './pages/Cart';
 import CheckoutPage from './pages/Checkout';
 import TrackOrder from './pages/TrackOrder';
 import AllProductsPage from './pages/AllProductsPage';
+import AuthPage from './pages/AuthPage';
 
 
 const RouteChangeTracker = () => {
@@ -40,6 +41,7 @@ function App() {
         <Route path='/checkout' element={<CheckoutPage />} />
         <Route path='/track-order' element={<TrackOrder />} />
         <Route path='/all-products' element={<AllProductsPage />} />
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="*" element={<h1 className='text-3xl font-bold text-center mt-20'>404 - Page Not Found</h1>} />
       </Routes>

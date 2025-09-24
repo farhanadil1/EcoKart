@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import products from '../data/products.json';
 import RotatingBanner from '../components/common/RotatingBanner';
@@ -18,7 +18,12 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import CustomAlert from '../components/common/CustomAlert';
 
+
 const ProductPage = () => {
+
+  const imgRef = useRef(null);
+  const cartRef = useRef(null);
+
   const { addToCart } = useCart();
   const [alertMessage, setAlertMessage] = useState('');
   const [loading, setLoading] = useState(true);
@@ -30,13 +35,49 @@ const ProductPage = () => {
     const timer = setTimeout(() => setLoading(false), 1500); // simulate loading
     return () => clearTimeout(timer);
   }, []);
+  const flyToCart = () => {
+    const img = imgRef.current;
+    const cart = cartRef.current;
+    if (!img || !cart) return;
+
+    const imgRect = img.getBoundingClientRect();
+    const cartRect = cart.getBoundingClientRect();
+
+    const clone = img.cloneNode(true);
+    clone.style.position = 'fixed';
+    clone.style.left = `${imgRect.left}px`;
+    clone.style.top = `${imgRect.top}px`;
+    clone.style.width = `${imgRect.width}px`;
+    clone.style.height = `${imgRect.height}px`;
+    clone.style.transition = 'transform 1s ease-in-out, opacity 1s ease-in-out';
+    clone.style.zIndex = 1000;
+    clone.style.pointerEvents = 'none';
+
+    document.body.appendChild(clone);
+
+    // Calculate scale ratio
+    const scale = 30 / Math.max(imgRect.width, imgRect.height);
+    const translateX = cartRect.left + cartRect.width / 2 - imgRect.left - imgRect.width / 2;
+    const translateY = cartRect.top + cartRect.height / 2 - imgRect.top - imgRect.height / 2;
+
+
+    requestAnimationFrame(() => {
+      clone.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      clone.style.opacity = '0.5';
+    });
+
+    setTimeout(() => {
+      clone.remove();
+    }, 1000);
+  };
+
 
   if (!product) return <p>Product Not Found.</p>;
 
   return (
     <div>
       <RotatingBanner />
-      <Navbar />
+      <Navbar cartRef={cartRef} />
 
       <CustomAlert
         title="Added to Cart"
@@ -61,7 +102,8 @@ const ProductPage = () => {
       ) : (
         <div className='grid grid-cols-1 mx-10 font-poppins mt-20 lg:grid-cols-2'>
           <div className='mb-10'>
-            <img 
+            <img
+              ref={imgRef} 
               src={product.imageUrl} 
               alt={product.name} 
               className='lg:ml-10'
@@ -85,6 +127,7 @@ const ProductPage = () => {
             <QuantitySelector
               onAddToCart={(qty) => {
                 addToCart(product, qty);
+                flyToCart();
                 setAlertMessage(`${qty} × ${product.name} added to cart`);
                 setTimeout(() => setAlertMessage(''), 3000);
               }}
