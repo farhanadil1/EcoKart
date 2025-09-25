@@ -139,7 +139,11 @@ export default function AuthPage() {
               {/* Alternate Option */}
               {isLogin && (
                 <button
-                  onClick={() => alert('Login without password')}
+                  onClick={(e) => {
+                  e.preventDefault();
+                    navigate('/auth/login/otp');
+                  
+                }}
                   type="button"
                   className="w-full py-2 border border-gray-400 rounded text-sm hover:bg-primary hover:text-white"
                 >

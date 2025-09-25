@@ -25,9 +25,9 @@ const Footer = () => {
         <div>
           <h3 className="text-xl font-bold mb-3">Quick Links</h3>
           <ul className="space-y-2 text-sm text-gray-100">
-            <li><a href="/category" className="hover:underline">Shop All Products</a></li>
+            <li><a href="/all-products" className="hover:underline">Shop All Products</a></li>
             <li><a href="/about" className="hover:underline">About Us</a></li>
-            <li><a href="/blog" className="hover:underline">Eco Tips Blog</a></li>
+            <li><a href="https://greencitizen.com/blog/sustainable-bloggers/" target='blank' className="hover:underline">Eco Tips Blog</a></li>
             <li><a href="/privacy" className="hover:underline">Privacy Policy</a></li>
             <li><a href="/terms" className="hover:underline">Terms of Service</a></li>
           </ul>
