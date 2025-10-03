@@ -53,7 +53,7 @@ const registerUser = asyncHandler( async(req, res) => {
     }
 
     return res.status(201).json(
-        new ApiResponse(201, 'User registered successfully', userCreated)
+        new ApiResponse(201, userCreated, 'User registered successfully')
     )
 })
 
@@ -88,6 +88,9 @@ const loginUser = asyncHandler( async(req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
+        sameSite: 'None',
+        path: '/',
+
     }
 
     return res
@@ -95,13 +98,15 @@ const loginUser = asyncHandler( async(req, res) => {
     .cookie('accessToken', accessToken, options)
     .cookie('refreshToken', refreshToken, options)
     .json(
-        new ApiResponse(200,
+        new ApiResponse(
+            200,
             {
                 user: userLoggedIn,
                 accessToken,
                 refreshToken
             },
-            'User Logged in Successfully', userLoggedIn)
+            'User Logged in Successfully'
+        )
     )
 })
 
@@ -132,7 +137,7 @@ const Auth = asyncHandler( async(req,res) => {
     return res
     .status(200)
     .json(
-        new ApiResponse(200, 'User is LoggedIn')
+        new ApiResponse(200, {}, 'User is LoggedIn')
     )
 })
 

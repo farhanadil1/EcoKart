@@ -1,21 +1,94 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import RotatingBanner from '../components/common/RotatingBanner';
-import Navbar from '../components/common/Navbar';
-import Footer from '../components/common/Footer';
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import RotatingBanner from '../components/common/RotatingBanner'
+import Navbar from '../components/common/Navbar'
+import Footer from '../components/common/Footer'
+import axios from 'axios'
+import {toast, Toaster} from 'react-hot-toast'
+import Cookies from 'js-cookie'
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [userName, setUserName] = useState('');
-  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(true)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [username, setUserName] = useState('')
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    if (mode === 'login') {
+      setIsLogin(true);
+    } else if (mode === 'register') {
+      setIsLogin(false);
+    }
+  }, [location]);
 
   const isFormValid =
     email.trim() &&
     password.trim() &&
-    (isLogin || (fullName.trim() && userName.trim()));
+    (isLogin || (fullName.trim() && username.trim()))
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!isFormValid) return
+
+    setLoading(true)
+
+    try {
+      if (isLogin) {
+        //Login API call
+        const response = await toast.promise(
+        axios.post('http://localhost:8000/api/users/login', {
+          email,
+          password,
+        },{
+          withCredentials: true
+        }),
+        {
+          loading: 'Logging in...'
+        }
+      )
+    
+        console.log('Login success:', response.data)
+        
+        const user = response.data.data.user; 
+        const username = user.username;
+        toast.success(`Welcome back, ${username}!`, { duration: 1500 })
+        Cookies.set('username', username, { expires: 7 });
+        setTimeout(() => {
+          navigate('/home')
+        }, 1200)
+      } else {
+        //Register API call
+        const response = await toast.promise(
+        axios.post('http://localhost:8000/api/users/register', {
+          email,
+          password,
+          fullName,
+          username,
+        }),
+        {
+          loading: 'Signing Up',
+          success: 'User Registered Successfully,Try to Login.',
+        })
+        console.log('Registration success:', response.data)
+        setTimeout( () => {
+          navigate('/auth?mode=login')
+        }, 1200)
+      }
+
+      
+    } catch (error) {
+      console.error('Auth error:', error.response?.data || error.message)
+      toast.error(error.response?.data?.message || 'Something went wrong!')
+    } finally {
+      setLoading(false)
+    }
+  };
 
   return (
     <div className="relative min-h-screen font-poppins overflow-hidden">
@@ -65,7 +138,7 @@ export default function AuthPage() {
             <h2 className="text-xl font-semibold mb-6">
               {isLogin ? 'Welcome back.' : 'Join us today.'}
             </h2>
-
+            <Toaster position="top-center" />
             {/* Form */}
             <form className="space-y-6">
               {!isLogin && (
@@ -76,7 +149,7 @@ export default function AuthPage() {
                     </label>
                     <input
                       type="text"
-                      value={userName}
+                      value={username}
                       onChange={(e) => setUserName(e.target.value)}
                       className="w-full border-b border-gray-400 focus:outline-none focus:border-primary py-1"
                     />
@@ -97,7 +170,7 @@ export default function AuthPage() {
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Email or username *
+                  Email *
                 </label>
                 <input
                   type="email"
@@ -120,20 +193,15 @@ export default function AuthPage() {
 
               {/* Main Button */}
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (isFormValid) {
-                    navigate('/home');
-                  }
-                }}
-                disabled={!isFormValid}
+                onClick={handleSubmit}
+                disabled={!isFormValid || loading}
                 className={`w-full py-2 rounded text-white ${
                   isFormValid
                     ? 'bg-primary hover:bg-primary'
                     : 'bg-gray-300 cursor-not-allowed'
                 }`}
               >
-                {isLogin ? 'Log in' : 'Sign up'}
+                {loading ? 'Processing...' : isLogin ? 'Log in' : 'Sign up'}
               </button>
 
               {/* Alternate Option */}

@@ -1,29 +1,46 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FiUser, FiSearch, FiShoppingCart, FiMenu, FiX } from "react-icons/fi";
-import { Link } from "react-router-dom";
-import products from "../../data/products.json"
+import { Link, useNavigate } from "react-router-dom";
+import products from "../../data/products.json";
+import Cookies from "js-cookie";
+import axios from 'axios'
+import toast,{Toaster} from 'react-hot-toast'
 
 const bestSellerIds = [19, 13, 7, 2];
 
-const Navbar = ({cartRef}) => {
+const Navbar = ({ cartRef }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searched, setSearched] = useState(products.filter(product => bestSellerIds.includes(product.id)));
-
+  const [searched, setSearched] = useState(
+    products.filter((product) => bestSellerIds.includes(product.id))
+  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
   const searchRef = useRef(null);
-  
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
- const menuItems = [
-  { name: "Home", link: "/home" },
-  { name: "Products", link: "/all-products" },
-  { name: "Skin & Body Care", link: "/category/skincare" },       
-  { name: "Household", link: "/category/household" },
-  { name: "Baby Care", link: "/category/baby care" },
-  { name: "Personal Care", link: "/category/personal care" },
-  { name: "Track Order", link: "/track-order" },
-];
+  const menuItems = [
+    { name: "Home", link: "/home" },
+    { name: "Products", link: "/all-products" },
+    { name: "Skin & Body Care", link: "/category/skincare" },
+    { name: "Household", link: "/category/household" },
+    { name: "Baby Care", link: "/category/baby care" },
+    { name: "Personal Care", link: "/category/personal care" },
+    { name: "Track Order", link: "/track-order" },
+  ];
 
+  // Check for username cookie on mount
+  useEffect(() => {
+    const userFromCookie = Cookies.get("username");
+    if (userFromCookie) {
+      setIsLoggedIn(true);
+      setUsername(userFromCookie);
+    }
+  }, []);
 
   // Close search dropdown when clicking outside
   useEffect(() => {
@@ -31,39 +48,61 @@ const Navbar = ({cartRef}) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsSearchOpen(false);
       }
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  const handleSearch = (e) => {
-  const query = e.target.value;
-  setSearchQuery(query);
 
-  if (!query.trim()) {
-    // Show bestsellers if input is empty
-    setSearched(products.filter(product => bestSellerIds.includes(product.id)));
-  } else {
-    // Filter products by name or description
-    const filtered = products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(query.toLowerCase()) ||
-        (product.shortDescription && product.shortDescription.toLowerCase().includes(query.toLowerCase())) ||
-        (product.description && product.description.toLowerCase().includes(query.toLowerCase()))
-    );
-    setSearched(filtered);
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (!query.trim()) {
+      setSearched(products.filter((product) => bestSellerIds.includes(product.id)));
+    } else {
+      const filtered = products.filter(
+        (product) =>
+          product.name.toLowerCase().includes(query.toLowerCase()) ||
+          (product.shortDescription &&
+            product.shortDescription.toLowerCase().includes(query.toLowerCase())) ||
+          (product.description &&
+            product.description.toLowerCase().includes(query.toLowerCase()))
+      );
+      setSearched(filtered);
+    }
+  };
+
+  const handleLogout = async () => {
+  try {
+    toast.promise(
+      axios.post('http://localhost:8000/api/users/logout', {}, { withCredentials: true }),
+      {
+        loading: 'Logging out...',
+        success: () => new Promise((resolve) => {
+        setTimeout(() => {
+        resolve('Logged out!');
+      }, 1000); 
+    }),
+    error: 'Could not logout'
+      }
+    ).then(() => {
+      Cookies.remove('username');
+      setIsLoggedIn(false);
+      setShowDropdown(false);
+      navigate('/home');
+    });
+
+  } catch (err) {
+    toast.error(err, 'Logout error!');
   }
 };
 
-  
- 
-  
-
-
-
   return (
-    <nav className="bg-pageBg border-b border-slate-300 px-4 md:px-8 relative">
+    <nav className="bg-pageBg border-b border-slate-300 px-4 md:px-8 relative z-50">
       <div className="flex items-center justify-between h-20">
-
         {/* Brand */}
         <div className="text-3xl font-audiowide text-[#0d2d1e] font-bold">
           <a href="/">EcoKart</a>
@@ -81,8 +120,7 @@ const Navbar = ({cartRef}) => {
 
         {/* Icons + Hamburger */}
         <div className="flex items-center gap-x-4 text-xl text-[#0d2d1e] relative">
-
-          {/* Search Icon + Dropdown */}
+          {/* Search */}
           <div ref={searchRef} className="relative">
             <button
               onClick={() => setIsSearchOpen((prev) => !prev)}
@@ -90,8 +128,6 @@ const Navbar = ({cartRef}) => {
             >
               <FiSearch />
             </button>
-
-            {/* Dropdown */}
             {isSearchOpen && (
               <div className="absolute right-0 mt-2 z-50 w-64 bg-white shadow-lg animate-slide-down">
                 <input
@@ -101,7 +137,6 @@ const Navbar = ({cartRef}) => {
                   onChange={handleSearch}
                   className="w-full p-2 border text-sm border-gray-400"
                 />
-                
                 <div className="max-h-[22rem] overflow-y-auto">
                   {searched.map((product) => (
                     <Link key={product.id} to={`/product/${product.id}`}>
@@ -110,11 +145,15 @@ const Navbar = ({cartRef}) => {
                           src={product.imageUrl}
                           alt={product.name}
                           className="w-20 h-20 object-cover"
-                          onError={(e) => (e.target.src = '/images/placeholder.png')}
+                          onError={(e) => (e.target.src = "/images/placeholder.png")}
                         />
                         <div>
-                          <h2 className="font-medium text-sm w-20 sm:w-full">{product.name}</h2>
-                          <h3 className="text-xs">{product.shortDescription || product.description}</h3>
+                          <h2 className="font-medium text-sm w-20 sm:w-full">
+                            {product.name}
+                          </h2>
+                          <h3 className="text-xs">
+                            {product.shortDescription || product.description}
+                          </h3>
                         </div>
                       </div>
                     </Link>
@@ -122,19 +161,54 @@ const Navbar = ({cartRef}) => {
                 </div>
               </div>
             )}
-
           </div>
-            <Link to={`/auth`}>
-          <FiUser className="cursor-pointer" />
-          </Link>
-            <Link to={`/cart`}>
-          <div ref={cartRef} className="relative cursor-pointer">
-           <FiShoppingCart />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full border border-white" />
+
+          {/* User Dropdown */}
+          <div ref={dropdownRef} className="relative z-50">
+            {!isLoggedIn ? (
+              <Link to="/auth">
+                <FiUser className="cursor-pointer" />
+              </Link>
+            ) : (
+              <>
+                <FiUser
+                  className="cursor-pointer"
+                  onClick={() => setShowDropdown((prev) => !prev)}
+                />
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-36 bg-white shadow-lg rounded-md py-2">
+                    <div className="flex items-center px-4 py-2 space-x-2">
+                      {/* Circle Avatar */}
+                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-medium text-sm">
+                        {username[0].toUpperCase()}
+                      </div>
+
+                      {/* Username */}
+                      <p className="text-sm text-gray-700">
+                        <strong>{username}</strong>
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 font-semibold text-sm text-red-600 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
+
+          {/* Cart */}
+          <Link to={`/cart`}>
+            <div ref={cartRef} className="relative cursor-pointer">
+              <FiShoppingCart />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full border border-white" />
+            </div>
           </Link>
 
-          {/* Hamburger for Mobile */}
+          {/* Hamburger */}
           <button
             className="md:hidden text-2xl"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -159,6 +233,7 @@ const Navbar = ({cartRef}) => {
           ))}
         </div>
       )}
+      <Toaster position="top-center" />
     </nav>
   );
 };

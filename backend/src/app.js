@@ -26,4 +26,8 @@ app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/orders', orderRouter)
 
+
+import { errorHandler } from './middlewares/errorHandler.middleware.js'
+app.use(errorHandler)
+
 export {app}
