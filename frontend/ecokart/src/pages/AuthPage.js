@@ -97,7 +97,8 @@ export default function AuthPage() {
         <img
           src="/bg.png"
           alt="background"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-opacity duration-700 opacity-0"
+          onLoad={(e) => e.target.classList.add('opacity-100')}
         />
         <div className="absolute inset-0 bg-black opacity-30" />
       </div>

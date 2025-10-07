@@ -1,32 +1,53 @@
-import React, { useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import RotatingBanner from '../components/common/RotatingBanner';
-import { useCart } from './CartContext';
 
 const TrackOrder = () => {
-
-   const { subtotal, baseDiscountAmount, totalDiscount, promoDiscountAmount, taxAmount, shippingFee, finalTotal } = useCart();
-
-
-  const query = new URLSearchParams(useLocation().search);
-  const encodedData = query.get('data');
-
-  const orderList = useMemo(() => {
-    const parsedOrder = encodedData
-      ? [JSON.parse(decodeURIComponent(encodedData))]
-      : JSON.parse(localStorage.getItem('orders')) || [];
-    return [...parsedOrder].reverse();
-  }, [encodedData]);
-
-  const getRandomDeliveryDay = () => {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    return days[Math.floor(Math.random() * days.length)];
-  };
-
+  const [orderList, setOrderList] = useState([]);
   const [selectedOrderIndex, setSelectedOrderIndex] = useState(null);
-const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), [orderList]);
+  const [deliveryDays, setDeliveryDays] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get('http://localhost:8000/api/orders/my-orders', {
+          withCredentials: true,
+        });
+        const orders = res.data.data;
+        setOrderList(orders.reverse());
+
+        setDeliveryDays(
+          orders.map(() => {
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            return days[Math.floor(Math.random() * days.length)];
+          })
+        );
+      } catch (err) {
+        console.error('Failed to fetch orders:', err);
+        setOrderList([]);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  const selectedOrder = orderList[selectedOrderIndex];
+
+  const subtotal = selectedOrder?.orderItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  ) ?? 0;
+
+  const taxAmount = subtotal * 0.05;
+  const baseDiscountAmount = subtotal * 0.10;
+  const promoApplied = selectedOrder?.promoCode ? true : false;
+  const promoDiscountAmount = promoApplied ? subtotal * 0.10 : 0;
+  const totalDiscount = baseDiscountAmount + promoDiscountAmount;
+  const shippingFee = subtotal < 500 ? 40 : 0;
+  const finalTotal = subtotal + taxAmount + shippingFee - totalDiscount;
 
   if (orderList.length === 0) {
     return (
@@ -47,49 +68,46 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
       </div>
     );
   }
-
-  
   return (
     <div>
       <RotatingBanner />
       <Navbar />
       <div className="font-poppins mx-6 md:mx-10 mt-10 mb-16">
-        <h1 className="text-4xl font-bold text-[#0d2d1e] mb-10 ">Track Your Orders</h1>
+        <h1 className="text-4xl font-bold text-[#0d2d1e] mb-10">Track Your Orders</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {orderList.map((orderData, index) => (
-            <div key={index} className="bg-white rounded border border-gray-200 shadow-md overflow-hidden">
+          {orderList.map((order, index) => (
+            <div key={order._id} className="bg-white rounded border border-gray-200 shadow-md overflow-hidden">
               <div className="p-6 space-y-4">
                 {/* Order Summary */}
                 <div className="flex justify-between items-center border-b pb-3">
-                  <div>
+                  <div className='sm:mt-[-22px]'>
+
                     <p className="text-sm text-gray-500">Order ID</p>
-                    <p className="text-base font-semibold text-gray-800">{orderData.orderNumber}</p>
+                    <p className="text-sm font-medium text-gray-800">{order._id}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-500">Status</p>
-                    <p className="text-sm font-medium text-green-600">Order Received</p>
+                    <p className="text-xs text-gray-500">Status</p>
+                    <p className="text-xs font-medium text-green-600">{order.status}</p>
                     <p className="text-xs text-gray-500">
-                      Est. Delivery: <span className="text-green-600">{deliveryDays[index]}</span>
+                      Est. Delivery: <span className="font-medium text-green-600">{deliveryDays[index]}</span>
                     </p>
                   </div>
                 </div>
 
                 {/* Product Preview */}
                 <div className="space-y-3">
-                  {orderData.items.map(item => (
-                    <div key={item.id} className="flex items-center gap-4">
+                  {order.orderItems.map(item => (
+                    <div key={item._id} className="flex items-center gap-4">
                       <img
-                        src={item.imageUrl || '/placeholder.png'}
+                        src={item.image || '/placeholder.png'}
                         alt={item.name}
                         className="w-16 h-16 object-cover rounded border"
                       />
                       <div className="flex-1">
                         <p className="font-medium text-gray-800">{item.name}</p>
                         <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                        <p className="text-sm text-gray-700 font-semibold">
-                          ₹{finalTotal.toFixed(2)}
-                        </p>
+                        <p className="text-sm text-gray-700 font-semibold">₹{item.price * item.quantity}</p>
                       </div>
                     </div>
                   ))}
@@ -108,78 +126,79 @@ const deliveryDays = useMemo(() => orderList.map(() => getRandomDeliveryDay()), 
         </div>
 
         {/* Modal */}
-       {selectedOrderIndex !== null && (
-  <div
-    className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
-    onClick={() => setSelectedOrderIndex(null)}
-  >
-    <div
-      className="bg-white rounded p-6 shadow-2xl max-w-xl w-full relative animate-fadeIn max-h-[90vh] flex flex-col"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        onClick={() => setSelectedOrderIndex(null)}
-        className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
-      >
-        &times;
-      </button>
+        {selectedOrderIndex !== null && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+            onClick={() => setSelectedOrderIndex(null)}
+          >
+            <div
+              className="bg-white rounded p-6 shadow-2xl max-w-xl w-full relative animate-fadeIn max-h-[90vh] flex flex-col"
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedOrderIndex(null)}
+                className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
+              >
+                &times;
+              </button>
 
-      <h2 className="text-2xl font-bold text-green-600 mb-4">Order Details</h2>
+              <h2 className="text-2xl font-bold text-green-600 mb-4">Order Details</h2>
 
-      {/* Scrollable content */}
-      <div className="overflow-y-auto custom-scrollbar pr-2 space-y-4 flex-1">
-        <div className="space-y-2 text-sm text-gray-700">
-          <p><strong>Order ID:</strong> {orderList[selectedOrderIndex].orderNumber}</p>
-          <p><strong>Status:</strong> <span className="text-green-600">Order Received</span></p>
-          <p><strong>Est. Delivery:</strong> <span className="text-green-600">{deliveryDays[selectedOrderIndex]}</span></p>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">Items</h3>
-          <ul className="space-y-3 text-gray-800 text-sm">
-            {orderList[selectedOrderIndex].items.map(item => (
-              <li key={item.id} className="flex items-center gap-4 pb-2">
-                <img
-                  src={item.imageUrl || '/placeholder.png'}
-                  alt={item.name}
-                  className="w-14 h-14 object-cover rounded-md border"
-                />
-                <div className="flex-1">
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                  <p className="text-sm font-semibold">₹{finalTotal.toFixed(2)}</p>
+              <div className="overflow-y-auto custom-scrollbar pr-2 space-y-4 flex-1">
+                <div className="space-y-2 text-sm text-gray-700">
+                  <p><strong>Order ID:</strong> {orderList[selectedOrderIndex].orderNumber}</p>
+                  <p><strong>Status:</strong> <span className="text-green-600">{orderList[selectedOrderIndex].status}</span></p>
+                  <p><strong>Est. Delivery:</strong> <span className="text-green-600">{deliveryDays[selectedOrderIndex]}</span></p>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
 
-        <div className="border-t pt-4 space-y-1 text-sm text-gray-700">
-          <h3 className="font-semibold text-gray-800 mb-1">Customer Details</h3>
-          <p><strong>Name:</strong> {orderList[selectedOrderIndex].user.name}</p>
-          <p><strong>Email:</strong> {orderList[selectedOrderIndex].user.email}</p>
-          <p><strong>Phone:</strong> {orderList[selectedOrderIndex].user.phone}</p>
-          <p><strong>Address:</strong> {orderList[selectedOrderIndex].user.address}</p>
-        </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Items</h3>
+                  <ul className="space-y-3 text-gray-800 text-sm">
+                    {orderList[selectedOrderIndex].orderItems.map(item => (
+                      <li key={item._id} className="flex items-center gap-4 pb-2">
+                        <img
+                          src={item.image || '/placeholder.png'}
+                          alt={item.name}
+                          className="w-14 h-14 object-cover rounded-md border"
+                        />
+                        <div className="flex-1">
+                          <p className="font-medium">{item.name}</p>
+                          <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                          <p className="text-sm font-semibold">₹{item.price * item.quantity}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-        <div className="border-t pt-4 text-right space-y-1 text-sm text-gray-800">
-          <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
-          <p>Tax (5%): ₹{taxAmount.toFixed(2)}</p>
-          <p>Shipping: ₹{shippingFee?.toFixed(2) || "0.00"}</p>
-          <p className="text-green-600">Flat Discount: −₹{baseDiscountAmount.toFixed(2)}</p>
-          {promoDiscountAmount > 0 && <p className="text-green-600">Promo Discount: −₹{promoDiscountAmount.toFixed(2)}</p>}
-          <p className="text-green-600">Total Discount: −₹{totalDiscount.toFixed(2)}</p>
-          <p className="font-bold text-lg pt-2">Total: ₹{finalTotal.toFixed(2)}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+                <div className="border-t pt-4 space-y-1 text-sm text-gray-700">
+                  <h3 className="font-semibold text-gray-800 mb-1">Customer Details</h3>
+                  <p><strong>Name:</strong> {orderList[selectedOrderIndex].shippingDetails.fullName}</p>
+                  <p><strong>Email:</strong> {orderList[selectedOrderIndex].shippingDetails.email}</p>
+                  <p><strong>Phone:</strong> {orderList[selectedOrderIndex].shippingDetails.phone}</p>
+                  <p><strong>Address:</strong> {orderList[selectedOrderIndex].shippingDetails.address}, {orderList[selectedOrderIndex].shippingDetails.city}</p>
+                </div>
+
+                <div className="border-t pt-4 text-right space-y-1 text-sm text-gray-800">
+                  <p>Subtotal: ₹{subtotal?.toFixed(2) || "0.00"}</p>
+                  <p>Tax (5%): ₹{taxAmount?.toFixed(2) || "0.00"}</p>
+                  <p>Shipping: ₹{shippingFee?.toFixed(2) || "0.00"}</p>
+                  <p className="text-green-600">Flat Discount: −₹{baseDiscountAmount?.toFixed(2) || "0.00"}</p>
+                  {promoDiscountAmount > 0 && (
+                    <p className="text-green-600">Promo Discount: −₹{promoDiscountAmount?.toFixed(2) || "0.00"}</p>
+                  )}
+                  <p className="text-green-600">Total Discount: −₹{totalDiscount?.toFixed(2) || "0.00"}</p>
+                  <p className="font-bold text-lg pt-2">Total: ₹{finalTotal?.toFixed(2) || "0.00"}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mt-12 flex justify-center">
           <Link to={`/home`}>
             <button className="bg-primary border border-primary text-white px-6 py-3 rounded font-semibold hover:bg-white hover:text-primary hover:border hover:border-primary transition duration-300">
-               Continue Shopping
+              Continue Shopping
             </button>
           </Link>
         </div>

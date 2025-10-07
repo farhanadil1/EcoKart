@@ -27,6 +27,15 @@ const registerUser = asyncHandler( async(req, res) => {
     ){
         throw new ApiError(400, 'All Fields are Required')
     }
+
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+        throw new ApiError(
+        400,
+        "Password must be at least 8 characters long and contain at least one special character."
+        );
+    }
+
     const userExists = await User.findOne({
             $or:[
                 {username: username},
@@ -141,9 +150,22 @@ const Auth = asyncHandler( async(req,res) => {
     )
 })
 
+const getAllUsers = asyncHandler ( async(req, res) => {
+    const users = await User.find({})
+    if(!users){
+        throw ApiError(404, 'Failed to fetch Users!')
+    }
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, users, 'Users Fetched Successfully.')
+    )
+})
+
 export {
     registerUser,
     loginUser,
     logoutUser,
-    Auth
+    Auth,
+    getAllUsers
 }

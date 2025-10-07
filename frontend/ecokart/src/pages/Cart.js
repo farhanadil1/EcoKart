@@ -8,9 +8,11 @@ import { useCart } from './CartContext';
 const Cart = () => {
   const [promoCode, setPromoCode] = useState("");
   const {
-     cartItems,
+    cartItems,
+    loading,
+    increaseQuantity,
+    decreaseQuantity,
     handleRemove,
-    handleQuantityChange,
     applyPromoCode,
     subtotal,
     totalDiscount,
@@ -20,7 +22,13 @@ const Cart = () => {
     finalTotal,
   } = useCart();
 
-  
+  if (loading) {
+    return (
+      <div className="mt-20 text-center text-xl font-poppins">
+        Loading your cart...
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -34,19 +42,17 @@ const Cart = () => {
           <div className="border border-gray-300 mt-6 py-4 px-6 rounded bg-white">
             {cartItems.length === 0 ? (
               <div>
-              <p className="text-center font-bold text-gray-500">
-                Your cart is empty.
-                <div className="mt-10 flex justify-center">
-                  <Link to={`/category`}>
-                    <button className="bg-primary border border-primary text-white px-6 py-3 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
-                      Shop Now
-                    </button>
-                  </Link>
-                </div>
-              </p>
-              
+                <p className="text-center font-bold text-gray-500">
+                  Your cart is empty.
+                  <div className="mt-10 flex justify-center">
+                    <Link to={`/category`}>
+                      <button className="bg-primary border border-primary text-white px-6 py-3 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
+                        Shop Now
+                      </button>
+                    </Link>
+                  </div>
+                </p>
               </div>
-              
             ) : (
               <>
                 <div className="grid grid-cols-3 font-semibold pb-3 text-gray-700 border-b border-gray-300">
@@ -55,41 +61,41 @@ const Cart = () => {
                   <div className="text-right">Price</div>
                 </div>
 
-                {cartItems.map((item) => (
+                {cartItems.map(({ product, quantity, _id }) => (
                   <div
-                    key={item.id}
+                    key={_id}
                     className="grid grid-cols-3 gap-4 items-center py-4 border-b border-gray-200"
                   >
                     {/* Product Info */}
                     <div className="lg:flex items-center space-x-4">
                       <img
-                        src={item.imageUrl}
-                        alt={item.name}
+                        src={product.imageUrl}
+                        alt={product.name}
                         className="w-20 h-20 object-cover rounded"
                         onError={(e) => (e.target.src = '/images/placeholder.png')}
                       />
                       <div>
-                        <h2 className="font-medium -ml-4 sm:-ml-0 w-20 sm:w-full">{item.name}</h2>
+                        <h2 className="font-medium -ml-4 sm:-ml-0 w-20 sm:w-full">{product.name}</h2>
                       </div>
                     </div>
 
                     {/* Quantity Controls */}
                     <div className="flex flex-wrap justify-center items-center gap-2">
                       <button
-                        onClick={() => handleQuantityChange(item.id, -1)}
+                        onClick={() => decreaseQuantity(product._id)}
                         className="bg-gray-200 px-2 rounded"
                       >
                         −
                       </button>
-                      <span>{item.quantity}</span>
+                      <span>{quantity}</span>
                       <button
-                        onClick={() => handleQuantityChange(item.id, +1)}
+                        onClick={() => increaseQuantity(product._id)}
                         className="bg-gray-200 px-2 rounded"
                       >
                         +
                       </button>
                       <button
-                        onClick={() => handleRemove(item.id)}
+                        onClick={() => handleRemove(product._id)}
                         className="text-sm text-red-500 hover:underline"
                       >
                         Remove
@@ -98,23 +104,25 @@ const Cart = () => {
 
                     {/* Price */}
                     <div className="text-right sm:text-right font-semibold text-gray-800">
-                      ₹{(item.priceINR * item.quantity).toFixed(2)}
+                      ₹{(product.price * quantity).toFixed(2)}
                     </div>
                   </div>
                 ))}
+
                 <div className="text-right text-xl font-bold mt-6">
                   Subtotal: ₹{subtotal.toFixed(2)}
                 </div>
               </>
             )}
           </div>
-           <div className='border border-gray-300 lg:max-w-300 mt-6 h-[100px] lg:h-[180px] shadow rounded'>
+
+          <div className='border border-gray-300 lg:max-w-300 mt-6 h-[100px] lg:h-[180px] shadow rounded'>
             <img 
-            src='/reward.jpg'
-            alt='coupon'
-            className='object-cover w-full h-full'
+              src='/reward.jpg'
+              alt='coupon'
+              className='object-cover w-full h-full'
             />
-           </div>
+          </div>
         </div>
 
         {/* Right Section: Checkout */}
@@ -155,6 +163,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

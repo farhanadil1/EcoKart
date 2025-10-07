@@ -1,69 +1,79 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { getCart, removeFromCart, updateQuantity } from "../pages/CartUtils";
-import products from "../data/products.json";
-import { calculateCartTotals } from "./calculateCartTotals";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import axios from "axios";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [discount, setDiscount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const loadCart = () => {
-    const cart = getCart();
-    const cartWithDetails = cart
-      .map((cartItem) => {
-        const product = products.find((p) => p.id === cartItem.id);
-        if (!product) return null;
-        return { ...product, quantity: cartItem.quantity };
-      })
-      .filter(Boolean);
-    setCartItems(cartWithDetails);
+  const API_URL = "http://localhost:8000/api/carts";
+
+  //Include cookies in all requests
+  const axiosConfig = {
+    withCredentials: true,
   };
 
-  useEffect(() => {
-    loadCart();
+  //Fetch Cart
+  const fetchCart = useCallback(async () => {
+    try {
+      const res = await axios.get(API_URL, { withCredentials: true });
+      setCartItems(res.data.data?.items || []);
+    } catch (error) {
+      console.error("Failed to fetch cart", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const addToCart = (product, quantity = 1) => {
-    const currentCart = getCart();
 
-    const existing = currentCart.find((item) => item.id === product.id);
-    let updatedCart;
-    if (existing) {
-      updatedCart = currentCart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-    } else {
-      updatedCart = [...currentCart, { ...product, quantity }];
+
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+
+  //Add to Cart
+  const addToCart = async (productId, quantity = 1) => {
+    try {
+      await axios.post(`${API_URL}/add/${productId}`, { quantity }, axiosConfig);
+      fetchCart();
+    } catch (error) {
+      console.error("Add to cart failed", error);
     }
-
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-    // Updates state immediately so cart page reflects changes
-    const cartWithDetails = updatedCart
-      .map((cartItem) => {
-        const productDetails = products.find((p) => p.id === cartItem.id);
-        if (!productDetails) return null;
-        return { ...productDetails, quantity: cartItem.quantity };
-      })
-      .filter(Boolean);
-
-    setCartItems(cartWithDetails);
   };
 
-  const handleRemove = (id) => {
-    removeFromCart(id);
-    loadCart();
+  //Increase
+  const increaseQuantity = async (productId) => {
+    try {
+      await axios.put(`${API_URL}/increase/product/${productId}`, {}, axiosConfig);
+      fetchCart();
+    } catch (error) {
+      console.error("Increase failed", error);
+    }
   };
 
-  const handleQuantityChange = (id, delta) => {
-    updateQuantity(id, delta);
-    loadCart();
+  //Decrease
+  const decreaseQuantity = async (productId) => {
+    try {
+      await axios.put(`${API_URL}/decrease/product/${productId}`, {}, axiosConfig);
+      fetchCart();
+    } catch (error) {
+      console.error("Decrease failed", error);
+    }
   };
 
+  //Remove
+  const handleRemove = async (productId) => {
+    try {
+      await axios.delete(`${API_URL}/remove/product/${productId}`, axiosConfig);
+      fetchCart();
+    } catch (error) {
+      console.error("Remove failed", error);
+    }
+  };
+
+  //Promo Code
   const applyPromoCode = (code) => {
     if (code === "SAVE10") {
       setDiscount(0.1);
@@ -73,18 +83,44 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const totals = calculateCartTotals(cartItems, discount);
+  //Totals
+  const baseDiscountRate = 0.1; // 10% base discount
+  const promoDiscountRate = discount; // 0.1 if promo applied, 0 otherwise
+
+  const subtotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+
+  // Apply base discount first
+  const baseDiscountAmount = subtotal * baseDiscountRate;
+
+  // Apply promo discount on subtotal after base discount
+  const promoDiscountAmount = (subtotal - baseDiscountAmount) * promoDiscountRate;
+
+  const totalDiscount = baseDiscountAmount + promoDiscountAmount;
+
+  const taxAmount = subtotal * 0.05;
+  const shippingFee = subtotal > 500 ? 0 : 40;
+
+  const finalTotal = subtotal - totalDiscount + taxAmount + shippingFee;
+
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
-        addToCart,         
+        loading,
+        addToCart,
+        increaseQuantity,
+        decreaseQuantity,
         handleRemove,
-        handleQuantityChange,
-        discount,
         applyPromoCode,
-        ...totals,
+        promoDiscountAmount,
+        discount,
+        subtotal,
+        totalDiscount,
+        taxAmount,
+        shippingFee,
+        finalTotal,
+        fetchCart, // manual refresh
       }}
     >
       {children}

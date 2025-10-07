@@ -4,6 +4,7 @@ import { verifyJWT } from '../middlewares/auth.middleware.js'
  
 const router = Router()
 
+//app.use('/api/orders', orderRouter)
 router.route('/razorpay').post(verifyJWT, createRazorpayOrder)
 router.route('/create').post(verifyJWT, createOrder)
 router.route('/my-orders').get(verifyJWT, getUserOrders)

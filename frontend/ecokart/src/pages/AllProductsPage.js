@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import products from '../data/products.json';
+import axios from 'axios';
 import RotatingBanner from '../components/common/RotatingBanner';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
@@ -9,14 +9,42 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 const AllProductsPage = () => {
+  const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [priceRange, setPriceRange] = useState('All');
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500); // Simulate loading
-    return () => clearTimeout(timer);
-  }, []);
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get('http://localhost:8000/api/products/',{
+        withCredentials: true
+      });
+      const data = res.data.data;
+
+      const mappedProducts = data.map(prod => ({
+        id: prod._id,
+        name: prod.name,
+        category: prod.category,
+        shortDescription: prod.shortDescription,
+        longDescription: prod.longDescription,
+        priceINR: Number(prod.price),
+        imageUrl: prod.imageUrl,
+        rating: Number(prod.rating),
+        reviewsCount: Number(prod.reviews),
+      }));
+
+      setProducts(mappedProducts);
+      setLoading(false);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
+
 
   const getFilteredProducts = () => {
     return products.filter(product => {
@@ -68,7 +96,7 @@ const AllProductsPage = () => {
         {/* Filter Controls */}
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
           <div className="flex items-center gap-2">
-            <label htmlFor="category-filter" className="text-gray-700 font-semibold">
+            <label htmlFor="category-filter" className="text-gray-700 w-fit font-semibold">
               Category:
             </label>
             <select
@@ -77,7 +105,7 @@ const AllProductsPage = () => {
               onChange={(e) => handleCategoryClick(e.target.value)}
               className="py-1 px-2 text-xs sm:text-sm rounded border border-gray-200"
             >
-              {categories.map(category => (
+              {[...new Set(categories)].map(category => (
                 <option key={category} value={category}>
                   {category}
                 </option>

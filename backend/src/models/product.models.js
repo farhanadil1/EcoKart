@@ -46,7 +46,7 @@ const productSchema = new Schema(
         },
         reviews: {
             type: Number
-        },
+        }
     },
     {
         timestamps: true

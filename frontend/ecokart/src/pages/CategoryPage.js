@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import products from '../data/products.json';
+import axios from 'axios';
 import RotatingBanner from '../components/common/RotatingBanner';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
@@ -10,17 +10,37 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 const CategoryPage = () => {
   const { category } = useParams();
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch products from backend
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000); // Simulate loading
-    return () => clearTimeout(timer);
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get('http://localhost:8000/api/products',{
+          withCredentials: true
+        });
+        const data = res.data.data || []; // assuming API returns { data: [ ...products ] }
+        setProducts(data);
+      } catch (error) {
+        console.error('❌ Failed to fetch products:', error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
+  // Filter products by category from URL param
   const filteredProducts = products.filter(
-    (p) => p.category.toLowerCase() === category.toLowerCase().trim()
+    (p) =>
+      p.category &&
+      p.category.toLowerCase().trim() === category.toLowerCase().trim()
   );
 
+  // Helper to title-case category heading
   const toTitleCase = (str) =>
     str
       .toLowerCase()
@@ -32,26 +52,34 @@ const CategoryPage = () => {
     <div>
       <RotatingBanner />
       <Navbar />
+
       <section className="py-10 px-4 md:px-8 bg-white font-poppins">
         <h2 className="text-3xl font-semibold md:pr-4 mb-6 text-center text-[#0d2d1e]">
           {toTitleCase(category)}
         </h2>
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Skeleton Loading */}
           {loading
             ? Array.from({ length: 8 }).map((_, index) => (
                 <div key={index} className="p-4 gap-4 mt-2">
                   <Skeleton height={270} />
-                  <Skeleton height={20} width={`80%`} className="mt-4" />
-                  <Skeleton height={20} width={`60%`} className="mt-2" />
-                  <Skeleton height={40} width={`100%`} className="mt-4" />
+                  <Skeleton height={20} width="80%" className="mt-4" />
+                  <Skeleton height={20} width="60%" className="mt-2" />
+                  <Skeleton height={40} width="100%" className="mt-4" />
                 </div>
               ))
-            : filteredProducts.length
+
+            // Products Grid
+            : filteredProducts.length > 0
             ? filteredProducts.map((product) => (
-                <div key={product.id} className="transition duration-300 gap-4 p-4 mt-2">
+                <div
+                  key={product._id}
+                  className="transition duration-300 gap-4 p-4 mt-2"
+                >
                   <div className="flex flex-col justify-between h-full">
                     <div className="overflow-hidden">
-                      <Link to={`/product/${product.id}`}>
+                      <Link to={`/product/${product._id}`}>
                         <img
                           src={product.imageUrl}
                           alt={product.name}
@@ -60,19 +88,21 @@ const CategoryPage = () => {
                       </Link>
                       <div className="relative group cursor-pointer">
                         <h3 className="text-lg font-bold font-raleway mt-4">
-                          <Link to={`/product/${product.id}`}>
+                          <Link to={`/product/${product._id}`}>
                             {product.name}
                             <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
                           </Link>
                         </h3>
                       </div>
-                      <p className="text-sm text-gray-500 mt-2">{product.shortDescription}</p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        {product.shortDescription}
+                      </p>
                     </div>
                     <p className="text-primary font-roleway font-bold mt-2">
-                      ₹{product.priceINR.toFixed(2)}
+                      ₹{Number(product.price).toFixed(2)}
                     </p>
                     <Link
-                      to={`/product/${product.id}`}
+                      to={`/product/${product._id}`}
                       className="bg-primary border-2 border-primary mt-4 text-white hover:bg-white hover:border-2 hover:border-primary hover:text-black w-full p-2 text-center"
                     >
                       View Details
@@ -80,7 +110,13 @@ const CategoryPage = () => {
                   </div>
                 </div>
               ))
-            : <p>No products found in {category} category.</p>}
+
+            // Empty state
+            : (
+              <p className="col-span-full text-center text-gray-600">
+                No products found in <strong>{toTitleCase(category)}</strong> category.
+              </p>
+            )}
         </div>
       </section>
 

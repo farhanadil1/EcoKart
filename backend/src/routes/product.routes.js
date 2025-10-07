@@ -14,4 +14,6 @@ router.route('/create').post(verifyJWT, upload.single('image'), createProduct)
 router.route('/:id').put(verifyJWT, updateProduct)
 router.route('/:id').delete(verifyJWT, deleteProduct)
 
+//app.use('/api/products', productRouter)
+
 export default router
