@@ -6,6 +6,7 @@ import Footer from '../components/common/Footer'
 import axios from 'axios'
 import {toast, Toaster} from 'react-hot-toast'
 import Cookies from 'js-cookie'
+import {showDeveloperMsg} from '../components/common/DeveloperMsg'
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
@@ -225,7 +226,7 @@ export default function AuthPage() {
             <div className="mt-4 text-center text-sm">
               {isLogin ? (
                 <button
-                  onClick={() => alert('Redirect to password recovery')}
+                  onClick={() => showDeveloperMsg('This feature is under development.')}
                   className="text-blue-500 hover:underline"
                 >
                   Forgot password?

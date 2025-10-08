@@ -7,8 +7,10 @@ import Footer from '../components/common/Footer';
 import Free from '../components/common/Free';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { DotBackgroundDemo } from '../components/common/DotBg';
 
 const AllProductsPage = () => {
+  const [error, setError] = useState();
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [priceRange, setPriceRange] = useState('All');
@@ -38,6 +40,7 @@ const AllProductsPage = () => {
       setLoading(false);
     } catch (err) {
       console.error("Failed to fetch products:", err);
+      setError("Server down")
       setLoading(false);
     }
   };
@@ -82,6 +85,29 @@ const AllProductsPage = () => {
 
   const handleCategoryClick = (category) => setSelectedCategory(category);
   const handlePriceChange = (e) => setPriceRange(e.target.value);
+  
+  if(error){
+    return <div>
+      
+      <RotatingBanner />
+      <Navbar />
+      <DotBackgroundDemo>
+      <h2 className="text-3xl font-semibold md:pr-4 pb-6 pt-10 text-center text-[#0d2d1e]">
+          Our Products
+        </h2>
+      <div className='flex justify-center'>
+      <img
+        src='./serverdown.png'
+        alt='server is down!'
+        className='h-35 w-60'
+      />
+    </div>
+    <p className='flex justify-center text-sm pb-8 text-gray-500'>We're currently experiencing technical difficulties. Please try again later.</p>
+    </DotBackgroundDemo>
+    <Footer />
+    </div>
+
+  }
 
   return (
     <div>

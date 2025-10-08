@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { GridBackgroundDemo } from '../common/GridBg';
 
 const reviewData = [
   { name: 'Ayesha', rating: 5, time: '1 day ago', verified: true, description: 'Amazing quality and fast delivery. Highly recommend! The coffee pods arrived well-packaged and right on time. The flavor is rich and smooth—far better than most brands I’ve tried.' },
@@ -45,9 +46,11 @@ const Reviews = () => {
         <div className='underline-offset-0 mb-6 ml-2 text-bold'>{renderStars(5)}</div>
         <p className='mt-1 ml-2'>Trusted</p>
       </div>
+      <GridBackgroundDemo>
       <div className="text-2xl md:text-5xl font-medium text-center mb-8">
         Join 100,000+ customers choosing eco-friendly living with Ecokart.
       </div>
+      
       <div className="relative">
         <button
           onClick={scrollLeft}
@@ -88,6 +91,7 @@ const Reviews = () => {
           →
         </button>
       </div>
+      
 
       <div className="mt-10 flex justify-center">
         <Link to={`/category`}>
@@ -96,7 +100,7 @@ const Reviews = () => {
         </button>
         </Link>
       </div>
-      
+      </GridBackgroundDemo>
     </div>
   );
 };

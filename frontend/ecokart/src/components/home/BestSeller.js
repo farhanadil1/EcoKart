@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { DotBackgroundDemo } from '../common/DotBg';
 
 const bestSellerIds = ['68e4a1f0d0461a981bc11493',
   '68dfba8075a68a0bf0720670', 
@@ -10,6 +11,7 @@ const bestSellerIds = ['68e4a1f0d0461a981bc11493',
 ]; 
 
 const BestSeller = () => {
+  const [error, setError] = useState(null)
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +30,7 @@ const BestSeller = () => {
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch best sellers:', error);
+        setError('Server down.')
         setLoading(false);
       }
     };
@@ -35,8 +38,23 @@ const BestSeller = () => {
     fetchBestSellers();
   }, []);
 
-  if (loading) {
+  if (loading){
     return <p className="text-center mt-4">Loading best sellers...</p>;
+  }
+  if (error){
+    return <div className='pb-6'>
+      <DotBackgroundDemo>
+      <h2 className="text-3xl pt-6 font-semibold md:pl-8 font-poppins text-[#0d2d1e]">Our Best Sellers</h2>
+      <div className='flex justify-center'>
+      <img
+        src='./serverdown.png'
+        alt='server is down!'
+        className='h-35 w-60'
+      />
+    </div>
+    <p className='flex justify-center text-sm pb-1 text-gray-500'>We're currently experiencing technical difficulties. Please try again later.</p>
+    </DotBackgroundDemo>
+    </div>
   }
 
   return (

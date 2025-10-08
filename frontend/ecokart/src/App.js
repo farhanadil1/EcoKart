@@ -14,6 +14,10 @@ import TrackOrder from './pages/TrackOrder';
 import AllProductsPage from './pages/AllProductsPage';
 import AuthPage from './pages/AuthPage';
 import UnderConstruction from './pages/Underconstruction';
+import AboutUs from './pages/AboutUs';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Terms from './pages/Terms'
+import EcoTipsBlog from './pages/EcoTipsBlog';
 
 
 const RouteChangeTracker = () => {
@@ -44,6 +48,10 @@ function App() {
         <Route path='/all-products' element={<AllProductsPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="*" element={ <UnderConstruction />} />
+        <Route path="/about" element={ <AboutUs />} />
+        <Route path='/privacy-policy' element={<PrivacyPolicy/>} />
+        <Route path='/terms' element={<Terms />} />
+        <Route path='/eco-tips-blogs' element={<EcoTipsBlog />} />
         <Route path="/product/:id" element={<ProductPage />} />
       </Routes>
     </Router>

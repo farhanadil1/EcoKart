@@ -6,10 +6,11 @@ import {
   FiMail,
   FiHeart
 } from 'react-icons/fi';
+import { showDeveloperMsg } from './DeveloperMsg';
 
 const Footer = () => {
   return (
-    <footer className="font-poppins bg-gradient-to-tr from-primary to-primary/90 text-white py-12">
+    <footer className="font-poppins bg-primary text-white py-12">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
 
         {/* About Ecokart */}
@@ -25,10 +26,10 @@ const Footer = () => {
         <div>
           <h3 className="text-xl font-bold mb-3">Quick Links</h3>
           <ul className="space-y-2 text-sm text-gray-100">
-            <li><a href="/all-products" className="hover:underline">Shop All Products</a></li>
-            <li><a href="/about" className="hover:underline">About Us</a></li>
-            <li><a href="https://greencitizen.com/blog/sustainable-bloggers/" target='blank' className="hover:underline">Eco Tips Blog</a></li>
-            <li><a href="/privacy" className="hover:underline">Privacy Policy</a></li>
+            <li><a href="/all-products" target='blank' className="hover:underline">Shop All Products</a></li>
+            <li><a href="/about" target='_blank' className="hover:underline">About Us</a></li>
+            <li><a href="/eco-tips-blogs" target='blank' className="hover:underline">Eco Tips Blog</a></li>
+            <li><a href="/privacy-policy" target='blank' className="hover:underline">Privacy Policy</a></li>
             <li><a href="/terms" className="hover:underline">Terms of Service</a></li>
           </ul>
         </div>
@@ -43,16 +44,18 @@ const Footer = () => {
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">
               <FiInstagram className="text-2xl" />
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-900">
+            <a href="https://github.com/farhanadil1" target="_blank" rel="noopener noreferrer" className="hover:text-blue-900">
               <FiGithub className="text-2xl" />
             </a>
-            <a href="mailto:team@ecokart.com" className="hover:text-yellow-300">
+            <a href="mailto:imfarhan712@gmail.com" target='blank' className="hover:text-yellow-300">
               <FiMail className="text-2xl" />
             </a>
           </div>
 
           {/* Store badges */}
-          <div className="flex space-x-4">
+          <div className="flex space-x-4"
+            onClick={() => showDeveloperMsg('Our apps are currently under development and will be launching soon.')}
+          >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
               alt="Get it on Google Play"

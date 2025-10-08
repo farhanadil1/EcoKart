@@ -7,8 +7,10 @@ import Footer from '../components/common/Footer';
 import Free from '../components/common/Free';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { DotBackgroundDemo } from '../components/common/DotBg';
 
 const CategoryPage = () => {
+  const [error, setError] = useState();
   const { category } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,10 +22,11 @@ const CategoryPage = () => {
         const res = await axios.get('http://localhost:8000/api/products',{
           withCredentials: true
         });
-        const data = res.data.data || []; // assuming API returns { data: [ ...products ] }
+        const data = res.data.data || []; 
         setProducts(data);
       } catch (error) {
-        console.error('❌ Failed to fetch products:', error);
+        console.error('Failed to fetch products:', error);
+        setError('server down')
         setProducts([]);
       } finally {
         setLoading(false);
@@ -32,7 +35,7 @@ const CategoryPage = () => {
 
     fetchProducts();
   }, []);
-
+  
   // Filter products by category from URL param
   const filteredProducts = products.filter(
     (p) =>
@@ -47,6 +50,28 @@ const CategoryPage = () => {
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+
+  if(error){
+    return <div className='font-poppins'>
+      <RotatingBanner />
+      <Navbar />
+      <DotBackgroundDemo>
+      <h2 className="text-3xl font-semibold md:pr-4 mb-6 pt-10 text-center text-[#0d2d1e]">
+          {toTitleCase(category)}
+        </h2>
+      <div className='flex justify-center'>
+      <img
+        src='../serverdown.png'
+        alt='server is down!'
+        className='h-35 w-60'
+      />
+    </div>
+    <p className='flex justify-center text-sm pb-8 text-gray-500'>We're currently experiencing technical difficulties. Please try again later.</p>
+    </DotBackgroundDemo>
+    <Footer />
+    </div>
+
+  }
 
   return (
     <div>
