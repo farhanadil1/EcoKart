@@ -15,7 +15,7 @@ const QuantitySelector = ({ onAddToCart }) => {
     </div>  
     <button
     onClick={() => onAddToCart(quantity)} 
-    className="ml-6 lg:ml-14 w-full py-3 bg-primary text-white hover:bg-white hover:border hover:border-primary hover:text-primary">
+    className="ml-6 lg:ml-14 w-full py-3 bg-primary text-white border-[1.5px] border-primary transition duration-300 hover:bg-white hover:border-[1.5px] hover:border-primary hover:text-primary">
         Add to Cart
     </button>
     </div>  

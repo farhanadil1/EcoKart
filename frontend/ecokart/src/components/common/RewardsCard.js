@@ -17,7 +17,7 @@ const RewardsCard = () => {
               <br className='hidden sm:block' />to earn points towards free vouchers. It's simple, spend
               <br className='hidden sm:block' />₹49, get 1 point. 60 points gets you exciting vouchers.
             </p>
-            <button className='mt-6 bg-primary shadow rounded px-5 py-2 text-base sm:text-lg border border-primary hover:bg-pageBg hover:text-black transition duration-300 text-white'>
+            <button className='mt-6 bg-primary shadow rounded px-5 py-2 text-base sm:text-lg border border-primary hover:bg-pageBg hover:text-primary transition duration-300 text-white'>
               Apply 'SAVE10' for flat 10% discount.
             </button>
           </div>

@@ -194,7 +194,7 @@ const AllProductsPage = () => {
                     <p className="text-primary font-roleway font-bold mt-2">₹{product.priceINR.toFixed(2)}</p>
                     <Link
                       to={`/product/${product.id}`}
-                      className="bg-primary border-2 border-primary mt-4 text-white hover:bg-white hover:border-2 hover:border-primary hover:text-black w-full p-2 text-center"
+                      className="bg-primary border-[1.5px] border-primary mt-4 text-white hover:bg-white hover:border-[1.5px] hover:border-primary hover:text-black transition duration-300 w-full p-2 text-center"
                     >
                       View Details
                     </Link>

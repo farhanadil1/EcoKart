@@ -5,6 +5,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import RotatingBanner from '../components/common/RotatingBanner';
+import { IoMdDoneAll } from "react-icons/io";
+
+
 
 const Checkout = () => {
   const { cartItems, subtotal, totalDiscount, taxAmount, shippingFee, finalTotal } = useCart();
@@ -200,7 +203,8 @@ const Checkout = () => {
       {invoice && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="bg-white rounded p-8 shadow-2xl max-w-lg w-full space-y-6">
-            <h2 className="text-2xl font-bold text-green-600">Order Confirmed</h2>
+            <h2 className="text-2xl font-bold flex text-green-600">Order Confirmed <IoMdDoneAll size={40} className='pl-2 -mt-1'/> </h2>
+            
             <span className="text-sm text-gray-500">Order ID: #{invoice._id}</span>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between"><span>Name:</span><span>{formData.name}</span></div>

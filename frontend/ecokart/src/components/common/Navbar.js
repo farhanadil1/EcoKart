@@ -77,26 +77,23 @@ const Navbar = ({ cartRef }) => {
 
   const handleLogout = async () => {
   try {
-    toast.promise(
+    await toast.promise(
       axios.post('http://localhost:8000/api/users/logout', {}, { withCredentials: true }),
       {
         loading: 'Logging out...',
-        success: () => new Promise((resolve) => {
-        setTimeout(() => {
-        resolve('Logged out!');
-      }, 1000); 
-    }),
-    error: 'Could not logout'
+        success: 'Logged out!',
+        error: 'Logout failed!',
       }
-    ).then(() => {
-      Cookies.remove('username');
-      setIsLoggedIn(false);
-      setShowDropdown(false);
-      navigate('/home');
-    });
+    );
+
+    // Clear cookies and state after successful logout
+    Cookies.remove('username');
+    setIsLoggedIn(false);
+    setShowDropdown(false);
+    navigate('/home');
 
   } catch (err) {
-    toast.error(err, 'Logout error!');
+    console.error(err);
   }
 };
 

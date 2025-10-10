@@ -33,6 +33,20 @@ const TrackOrder = () => {
 
     fetchOrders();
   }, []);
+  
+  const formatDateTime = (timestamp) => {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    return date.toLocaleString("en-IN", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
 
   const selectedOrder = orderList[selectedOrderIndex];
 
@@ -85,7 +99,11 @@ const TrackOrder = () => {
 
                     <p className="text-sm text-gray-500">Order ID</p>
                     <p className="text-sm font-medium text-gray-800">{order._id}</p>
+                    <div className="text-xs text-gray-500">
+                    <p>Order Date <p className="font-medium text-gray-500">{formatDateTime(order.createdAt)}</p></p>
                   </div>
+                  </div>
+                  
                   <div className="text-right">
                     <p className="text-xs text-gray-500">Status</p>
                     <p className="text-xs font-medium text-green-600">{order.status}</p>
@@ -146,9 +164,12 @@ const TrackOrder = () => {
 
               <div className="overflow-y-auto custom-scrollbar pr-2 space-y-4 flex-1">
                 <div className="space-y-2 text-sm text-gray-700">
-                  <p><strong>Order ID:</strong> {orderList[selectedOrderIndex].orderNumber}</p>
+                  <p><strong>Order ID:</strong> {orderList[selectedOrderIndex]._id}</p>
                   <p><strong>Status:</strong> <span className="text-green-600">{orderList[selectedOrderIndex].status}</span></p>
                   <p><strong>Est. Delivery:</strong> <span className="text-green-600">{deliveryDays[selectedOrderIndex]}</span></p>
+                  <p>
+                    <strong>Order Date:</strong> {formatDateTime(orderList[selectedOrderIndex].createdAt)}
+                  </p>
                 </div>
 
                 <div>

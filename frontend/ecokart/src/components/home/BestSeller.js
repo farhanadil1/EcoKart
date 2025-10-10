@@ -83,7 +83,7 @@ const BestSeller = () => {
               <p className="text-primary font-roleway font-bold mt-2">₹{Number(product.price).toFixed(2)}</p>
               <Link to={`/product/${product._id}`}>
               <button
-                className='bg-primary mt-8 border-2 border-primary text-white hover:bg-white hover:border-2 hover:border-primary hover:text-black w-full p-2'
+                className='bg-primary mt-8 border-[1.5px] border-primary text-white hover:bg-white hover:border-[1.5px] hover:border-primary transition duration-300 hover:text-black w-full p-2'
               >
                 View Details
               </button>
