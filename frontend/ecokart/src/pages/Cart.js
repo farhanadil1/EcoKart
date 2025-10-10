@@ -4,6 +4,7 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
+import RewardsCard from '../components/common/RewardsCard';
 
 const Cart = () => {
   const [promoCode, setPromoCode] = useState("");
@@ -46,7 +47,7 @@ const Cart = () => {
                   Your cart is empty.
                   <div className="mt-10 flex justify-center">
                     <Link to={`/category`}>
-                      <button className="bg-primary border border-primary text-white px-6 py-3 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
+                      <button className="bg-primary border rounded border-primary text-white px-6 py-3 hover:bg-white hover:border hover:border-primary hover:text-primary transition">
                         Shop Now
                       </button>
                     </Link>
@@ -116,7 +117,7 @@ const Cart = () => {
             )}
           </div>
 
-          <div className='border border-gray-300 lg:max-w-300 mt-6 h-[100px] lg:h-[180px] shadow rounded'>
+          <div className='hidden sm:block border border-gray-300 lg:max-w-300 mt-6 h-[100px] lg:h-[180px] shadow rounded'>
             <img 
               src='/reward.jpg'
               alt='coupon'
@@ -162,6 +163,9 @@ const Cart = () => {
             </Link>
           </div>
         </div>
+      </div>
+      <div className='block sm:hidden '>
+        <RewardsCard />
       </div>
 
       <Footer />

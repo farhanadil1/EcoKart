@@ -12,7 +12,7 @@ export function GridBackgroundDemo({ children }) {
         className={cn(
           "absolute inset-0 pointer-events-none",
           "[background-size:60px_60px]",
-          "[background-image:linear-gradient(to_right,rgba(0,0,0,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.07)_1px,transparent_1px)]",
+          "[background-image:linear-gradient(to_right,rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.1)_1px,transparent_1px)]",
           "[mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)]"
         )}
       />

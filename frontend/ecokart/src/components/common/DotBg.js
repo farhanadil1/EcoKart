@@ -12,7 +12,7 @@ export function DotBackgroundDemo({ children }) {
         className={cn(
           "absolute inset-0 pointer-events-none",
           "[background-size:20px_20px]",
-          "[background-image:radial-gradient(rgba(0,0,0,0.15)_1px,transparent_1px)]",
+          "[background-image:radial-gradient(rgba(0,0,0,0.2)_1px,transparent_1px)]",
           "[mask-image:linear-gradient(to bottom,transparent_0%,black_15%,black_85%,transparent_100%)]"
         )}
       />
