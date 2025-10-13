@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const CartContext = createContext();
 
@@ -76,10 +77,12 @@ export const CartProvider = ({ children }) => {
   //Promo Code
   const applyPromoCode = (code) => {
     if (code === "SAVE10") {
-      setDiscount(0.1);
+      toast('This promo will be available shortly!', {
+        icon: '⚠️',
+      });
     } else {
       setDiscount(0);
-      alert("Invalid promo code");
+      toast.error("Invalid promo code.");
     }
   };
 

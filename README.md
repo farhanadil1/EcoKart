@@ -198,7 +198,21 @@ open a pull request
 ---
 
 ## 📜 License
-Distributed under the MIT License.
+
+© 2025 [Md Adil Farhan](https://github.com/farhanadil1/). All Rights Reserved.  
+
+This project, **EcoKart**, was created by *Md Adil Farhan* as part of personal learning and portfolio development.  
+You are welcome to **view and learn** from the code and design for educational or inspiration purposes.  
+
+However, please note:
+- ❌ Copying, or reuse of the design, code, or assets without permission is **not allowed**.  
+- 🚫 Commercial or public use is **strictly prohibited** unless you have received written consent from the author.  
+
+If you’d like to collaborate, reference, or feature this project, feel free to reach out —  
+I’d be happy to connect and discuss it!   
+
+> *This project is shared in good faith to inspire learning, creativity, and eco-conscious development.*
+
 
 ---
 
@@ -207,7 +221,7 @@ Distributed under the MIT License.
 
 📧 imfarhan574@gmail.com
 
-🔗 Live Project: https://ecokart-adil-farhan.netlify.app
+🔗 Live Frontend: https://ecokart-adil-farhan.netlify.app
 
 🌐 GitHub: [farhanadil1](https://github.com/farhanadil1/)
 

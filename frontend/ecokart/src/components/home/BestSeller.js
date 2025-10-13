@@ -44,7 +44,7 @@ const BestSeller = () => {
   if (error){
     return <div className='pb-6'>
       <DotBackgroundDemo>
-      <h2 className="text-3xl pt-6 font-semibold md:pl-8 font-poppins text-[#0d2d1e]">Our Best Sellers</h2>
+      <h2 className="text-2xl md:text-3xl pt-6 font-semibold pl-4 font-poppins text-[#0d2d1e]">Our Best Sellers</h2>
       <div className='flex justify-center'>
       <img
         src='./serverdown.png'

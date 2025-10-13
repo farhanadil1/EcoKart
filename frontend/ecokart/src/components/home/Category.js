@@ -10,7 +10,7 @@ const category = [
 const Category = () => {
   return (
     <div className="font-poppins px-4 md:px-8 bg-white">
-      <div className="text-3xl font-semibold text-[#0d2d1e] mb-6">
+      <div className="text-2xl md:text-3xl font-poppins font-semibold text-[#0d2d1e] mb-2 md:mb-6">
         Shop by Category
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 px-4 gap-8">

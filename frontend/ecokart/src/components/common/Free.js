@@ -16,12 +16,12 @@ const Free = () => {
             {/*Left Section*/}
             <div className='mt-14 ml-6 lg:ml-14 text-left'>
             <h3 className='bg-primary text-xs w-fit p-1 text-white'>Subscribe & Save</h3>
-            <h1 className='text-3xl pt-6 lg:text-4xl font-semibold'>
+            <h1 className='text-2xl md:text-3xl pt-6 lg:text-4xl font-semibold'>
              Get a free ecobox when you subscribe to Ecokart.
             </h1>
-            <p className='text-gray-700 font-normal pt-4'>Better for the planet, better for youre bank balance. Plus you'll get a ecobox free.</p>
+            <p className='text-gray-600 font-normal pt-4'>Better for the planet, better for youre bank balance. Plus you'll get a ecobox free.</p>
             {/*icons section*/}
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 pt-8 text-gray-700 lg:pb-20'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 pt-8 text-gray-600 lg:pb-20'>
                 <div className='flex'>
                 <div className="flex col-span-1 items-center justify-center w-10 h-10 border border-gray-700 rounded-full">
                     <GiRecycle size={24} className="text-primary" />

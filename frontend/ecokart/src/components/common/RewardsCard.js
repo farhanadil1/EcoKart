@@ -9,7 +9,7 @@ const RewardsCard = () => {
 
           {/* Text Section */}
           <div className='lg:col-span-3 text-center lg:text-left lg:mb-6'>
-            <h1 className='text-4xl sm:text-4xl lg:text-5xl font-semibold'>
+            <h1 className='text-3xl sm:text-4xl lg:text-5xl font-semibold'>
               Ecokart Rewards.
             </h1>
             <p className='text-base sm:text-lg md:text-xl font-medium text-gray-700 pt-4 leading-relaxed'>

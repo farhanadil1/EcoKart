@@ -66,7 +66,7 @@ const Reviews = () => {
           {reviewData.map((review, idx) => (
             <div
               key={idx}
-              className="min-w-[300px] max-w-[300px] cursor-pointer hover:bg-pageBg bg-gray-50 p-6 rounded-md shadow hover:shadow-lg transition shrink-0"
+              className="min-w-[300px] max-w-[300px] cursor-pointer hover:bg-pageBg bg-gray-50 p-6 rounded-md shadow-md hover:shadow-lg transition shrink-0"
             >
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-base">{review.name}</h3>
