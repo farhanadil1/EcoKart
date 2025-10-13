@@ -1,22 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-const slides = [
+const desktopSlides = [
   { imageUrl: "./slide1.jpg", link: "/category/baby care" },
   { imageUrl: "./slide2.jpg", link: "/category/skincare" },
   { imageUrl: "./slide3.jpg", link: "/category/personal care" },
 ];
 
+const mobileSlides = [
+  { imageUrl: "./slide4.png", link: "/category/personal care"},
+  { imageUrl: "./slide5.png", link: "/category/skincare" },
+  
+  
+];
+
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const slides = isMobile ? mobileSlides : desktopSlides;
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  };
+  }, [slides]);
 
   // Auto slide every 7 seconds
   useEffect(() => {
@@ -24,13 +34,23 @@ const HeroSection = () => {
       nextSlide();
     }, 7000);
     return () => clearInterval(interval);
-  }, []);
+  }, [nextSlide]);
+
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint
+    };
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [slides]);
 
   return (
-    <div className="relative w-full font-poppins bg-pageBg mx-auto overflow-hidden">
-      <div className="relative bg-pageBg md:h-[360px] h-56 md:p-4 flex items-center">
+    <div className="relative w-full font-poppins bg-pageBg overflow-hidden">
+      <div className="relative bg-pageBg md:h-[360px] h-[485px] md:p-4 flex items-center">
 
-        {/* Left Arrow - hidden on small screens */}
+        {/* Left Arrow */}
         <button
           onClick={prevSlide}
           className="hidden md:flex absolute left-4 z-10 bg-white p-2 rounded-full shadow-lg"
@@ -52,15 +72,14 @@ const HeroSection = () => {
                 <img
                   src={slide.imageUrl}
                   alt={`Slide ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out 
-                    scale-110 md:scale-100"
+                  className="w-full h-full object-contain md:object-cover transition-transform duration-700 ease-out mx-auto"
                 />
               </a>
             </div>
           ))}
         </div>
 
-        {/* Right Arrow - hidden on small screens */}
+        {/* Right Arrow */}
         <button
           onClick={nextSlide}
           className="hidden md:flex absolute right-4 z-10 bg-white p-2 rounded-full shadow-lg"
