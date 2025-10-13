@@ -208,7 +208,7 @@ However, please note:
 - ❌ Copying, or reuse of the design, code, or assets without permission is **not allowed**.  
 - 🚫 Commercial or public use is **strictly prohibited** unless you have received written consent from the author.  
 
-If you’d like to collaborate, reference, or feature this project, feel free to reach out —  
+If you’d like to collaborate, reference, or feature this project, feel free to reach out -- 
 I’d be happy to connect and discuss it!   
 
 > *This project is shared in good faith to inspire learning, creativity, and eco-conscious development.*
