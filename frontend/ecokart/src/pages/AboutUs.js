@@ -118,9 +118,9 @@ const AboutUs = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 ">
           {[
-            { name: "Md Adil Farhan", role: "Founder & CEO" },
-            { name: "Adil Farhan", role: "Marketing Head" },
-            { name: "Farhan Adil", role: "Product Designer" },
+            { name: "Md Adil Farhan", role: "Founder & CEO", link:"https://farhanadil.netlify.app" },
+            { name: "Adil Farhan", role: "Ui/Ux designer", link:"https://github.com/farhanadil1" },
+            { name: "Farhan Adil", role: "Software Developer", link: "https://www.linkedin.com/in/md-adil-farhan-b4956424a/" },
           ].map((member, idx) => (
             <motion.div
               key={idx}
@@ -130,7 +130,7 @@ const AboutUs = () => {
               <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center text-2xl font-bold text-green-600">
                 {member.name[0]}
               </div>
-              <h3 className="text-lg font-semibold">{member.name}</h3>
+              <h3 className="text-lg font-semibold hover:underline hover:text-blue-500"><a href={member.link} target='blank'>{member.name}</a></h3>
               <p className="text-gray-500 text-sm">{member.role}</p>
             </motion.div>
           ))}
