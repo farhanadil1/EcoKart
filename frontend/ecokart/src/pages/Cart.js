@@ -2,12 +2,27 @@ import React, { useState } from 'react';
 import RotatingBanner from '../components/common/RotatingBanner';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
 import RewardsCard from '../components/common/RewardsCard';
+import toast from 'react-hot-toast';
+import Cookies from "js-cookie"
 
 const Cart = () => {
+  const navigate = useNavigate()
   const [promoCode, setPromoCode] = useState("");
+
+  const handleCheckout = () => {
+    const userFromCookie = Cookies.get("username");
+    if(!userFromCookie){
+      toast.error('Please Login to proceed to checkout.')
+      return navigate('/auth?mode=login')
+    }
+    navigate('/checkout')
+  }
+  
+  
+  
   const {
     cartItems,
     loading,
@@ -156,11 +171,13 @@ const Cart = () => {
             )}
             <p className="text-xl font-semibold">Final Total: ₹{finalTotal.toFixed(2)}</p>
 
-            <Link to={`/checkout`}>
-              <button className="w-full bg-primary border border-primary text-white py-2 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4">
+            
+              <button 
+                onClick={handleCheckout}
+                className="w-full bg-primary border border-primary text-white py-2 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4">
                 Proceed to Checkout
               </button>
-            </Link>
+            
           </div>
         </div>
       </div>
