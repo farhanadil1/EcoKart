@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { DotBackgroundDemo } from '../common/DotBg';
 
+
 const bestSellerIds = ['68e4a1f0d0461a981bc11493',
   '68dfba8075a68a0bf0720670', 
   '68dfbda375a68a0bf07206aa',
@@ -17,6 +18,7 @@ const BestSeller = () => {
 
   useEffect(() => {
     const fetchBestSellers = async () => {
+      setLoading(true);
       try {
         const res = await axios.get('https://ecokart-fet7.onrender.com/api/products/',{
 
@@ -27,19 +29,24 @@ const BestSeller = () => {
         //Filter only best sellers by _id
         const bestSellers = allProducts.filter(product => bestSellerIds.includes(product._id));
         setProducts(bestSellers);
-        setLoading(false);
+        
       } catch (error) {
         console.error('Failed to fetch best sellers:', error);
         setError('Server down.')
-        setLoading(false);
+      } finally{
+        setLoading(false)
       }
     };
 
     fetchBestSellers();
   }, []);
 
-  if (loading){
-    return <p className="text-center mt-4">Loading best sellers...</p>;
+  if (loading) {
+    return (
+        <div className="flex justify-center items-center h-40 mt-14">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
+        </div>
+    );
   }
   if (error){
     return <div className='pb-6'>

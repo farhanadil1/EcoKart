@@ -9,9 +9,11 @@ const TrackOrder = () => {
   const [orderList, setOrderList] = useState([]);
   const [selectedOrderIndex, setSelectedOrderIndex] = useState(null);
   const [deliveryDays, setDeliveryDays] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setLoading(true);
       try {
         const res = await axios.get('https://ecokart-fet7.onrender.com/api/orders/my-orders', {
           withCredentials: true,
@@ -28,6 +30,8 @@ const TrackOrder = () => {
       } catch (err) {
         console.error('Failed to fetch orders:', err);
         setOrderList([]);
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -62,6 +66,18 @@ const TrackOrder = () => {
   const totalDiscount = baseDiscountAmount + promoDiscountAmount;
   const shippingFee = subtotal < 500 ? 40 : 0;
   const finalTotal = subtotal + taxAmount + shippingFee - totalDiscount;
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="flex justify-center items-center h-40 mt-14">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (orderList.length === 0) {
     return (

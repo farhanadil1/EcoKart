@@ -20,7 +20,8 @@ const Checkout = () => {
   });
   const [errors, setErrors] = useState({});
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
-  const [isConfirmingOrder, setIsConfirmingOrder] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
   const [invoice, setInvoice] = useState(null);
   const navigate = useNavigate();
 
@@ -46,7 +47,6 @@ const Checkout = () => {
   // Place Order
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
-    setIsConfirmingOrder(true)
     setIsPlacingOrder(true);
 
     try {
@@ -67,6 +67,7 @@ const Checkout = () => {
         name: 'EcoKart',
         order_id: razorpayOrderId,
         handler: async function (response) {
+          setIsProcessingPayment(true);
           // Step 3: Confirm order in backend
           const backendRes = await axios.post(
             'https://ecokart-fet7.onrender.com/api/orders/create',
@@ -101,7 +102,7 @@ const Checkout = () => {
       alert('Failed to place order. Try again.');
     } finally {
       setIsPlacingOrder(false);
-      setIsConfirmingOrder(false);
+      setIsProcessingPayment(false)
     }
   };
 
@@ -201,14 +202,12 @@ const Checkout = () => {
       </div>
 
       <Footer />
-
-      {isConfirmingOrder && (
+      {isProcessingPayment && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="text-white text-lg font-semibold animate-pulse">
-            Confirming your order...
-          </div>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
         </div>
       )}
+      
 
 
       {/* Invoice Modal */}
