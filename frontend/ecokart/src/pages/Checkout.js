@@ -50,7 +50,7 @@ const Checkout = () => {
     try {
       // Step 1: Create Razorpay order on backend
       const orderRes = await axios.post(
-        'http://localhost:8000/api/orders/razorpay',
+        'https://ecokart-fet7.onrender.com/api/orders/razorpay',
         { amount: Math.round(finalTotal) },
         { withCredentials: true }
       );
@@ -67,7 +67,7 @@ const Checkout = () => {
         handler: async function (response) {
           // Step 3: Confirm order in backend
           const backendRes = await axios.post(
-            'http://localhost:8000/api/orders/create',
+            'https://ecokart-fet7.onrender.com/api/orders/create',
             {
               shippingDetails: {
                 fullName: formData.name,

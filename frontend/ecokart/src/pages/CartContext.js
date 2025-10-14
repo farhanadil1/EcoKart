@@ -9,7 +9,7 @@ export const CartProvider = ({ children }) => {
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = "http://localhost:8000/api/carts";
+  const API_URL = "https://ecokart-fet7.onrender.com/api/carts";
 
   //Include cookies in all requests
   const axiosConfig = {

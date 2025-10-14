@@ -18,7 +18,7 @@ const BestSeller = () => {
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/products/',{
+        const res = await axios.get('https://ecokart-fet7.onrender.com/api/products/',{
 
           withCredentials: true
         });

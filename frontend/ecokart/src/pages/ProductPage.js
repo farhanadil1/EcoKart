@@ -34,7 +34,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/products/${id}`,{
+        const res = await axios.get(`https://ecokart-fet7.onrender.com/api/products/${id}`,{
           withCredentials: true
         });
         const productData = res.data.data;
@@ -115,7 +115,7 @@ const ProductPage = () => {
   const handleAddToCart = async (quantity) => {
     try {
       await axios.post(
-        `http://localhost:8000/api/carts/add/${product._id}`,
+        `https://ecokart-fet7.onrender.com/api/carts/add/${product._id}`,
         {
           productId: product._id, // must include productId
           quantity,

@@ -43,7 +43,7 @@ export default function AuthPage() {
       if (isLogin) {
         //Login API call
         const response = await toast.promise(
-        axios.post('http://localhost:8000/api/users/login', {
+        axios.post('https://ecokart-fet7.onrender.com/api/users/login', {
           email,
           password,
         },{
@@ -66,7 +66,7 @@ export default function AuthPage() {
       } else {
         //Register API call
         const response = await toast.promise(
-        axios.post('http://localhost:8000/api/users/register', {
+        axios.post('https://ecokart-fet7.onrender.com/api/users/register', {
           email,
           password,
           fullName,

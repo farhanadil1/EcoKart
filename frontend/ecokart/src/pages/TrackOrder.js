@@ -13,7 +13,7 @@ const TrackOrder = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/orders/my-orders', {
+        const res = await axios.get('https://ecokart-fet7.onrender.com/api/orders/my-orders', {
           withCredentials: true,
         });
         const orders = res.data.data;

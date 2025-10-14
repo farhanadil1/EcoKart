@@ -19,7 +19,7 @@ const AllProductsPage = () => {
   useEffect(() => {
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/api/products/',{
+      const res = await axios.get('https://ecokart-fet7.onrender.com/api/products/',{
         withCredentials: true
       });
       const data = res.data.data;
