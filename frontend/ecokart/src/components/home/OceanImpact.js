@@ -48,7 +48,7 @@ const OceanImpact = () => {
       <p className="text-xs sm:text-sm md:text-md leading-relaxed">
         In 2023, we launched the Ecokart Impact Initiative a pledge to restore balance between everyday consumption and environmental responsibility. For every product sold, we contribute to the recovery of ocean-bound plastic and support efforts that reduce pollution at its source.
       </p>
-      <button className="mt-6 bg-white border border-primary text-[#0d2d1e] font-medium text-xs sm:text-base px-3 py-1 sm:px-6 sm:py-2 hover:text-white hover:bg-primary transition">
+      <button className="mt-6 bg-white border border-primary text-[#0d2d1e] font-medium text-xs sm:text-base px-3 py-2 sm:px-6 hover:text-white hover:bg-primary transition">
         <a href='https://theoceancleanup.com/' target="_blank" rel="noopener noreferrer">Find out more</a>
       </button>
     </div>
