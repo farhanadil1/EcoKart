@@ -10,6 +10,8 @@ const desktopSlides = [
 const mobileSlides = [
   { imageUrl: "./slide4.png", link: "/category/skincare" },
   { imageUrl: "./slide5.png", link: "/category/personal care" },
+  { imageUrl: "./slide6.png", link: "/category/household" },
+  { imageUrl: "./slide8.png", link: "/category/baby care" },
   { imageUrl: "./slide7.png", link: "/all-products"},
 ];
 
@@ -58,7 +60,7 @@ const HeroSection = () => {
         </button>
 
         {/* Slide Container with scrollable fallback */}
-        <div className="w-full overflow-x-auto scrollbar-hide">
+        <div className="w-full scrollbar-hide">
           <div
             className="flex w-full transition-transform duration-700"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}

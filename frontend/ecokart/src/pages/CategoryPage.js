@@ -66,7 +66,7 @@ const CategoryPage = () => {
         className='h-35 w-60'
       />
     </div>
-    <p className='flex justify-center text-sm pb-8 text-gray-500'>We're currently experiencing technical difficulties. Please try again later.</p>
+    <p className='flex justify-center text-sm pb-8 px-8 text-gray-500'>We're currently experiencing technical difficulties. Please try again later.</p>
     </DotBackgroundDemo>
     <Footer />
     </div>
