@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 const app = express()
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://ecokart-adil-farhan.netlify.app', 'https://ecokart-adil-farhan.onrender.com'],
+    origin: ['http://localhost:3000', 'https://ecokart-adil-farhan.netlify.app', 'http://localhost:3001'],
     credentials: true
 }))
 

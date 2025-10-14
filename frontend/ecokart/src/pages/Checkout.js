@@ -20,6 +20,7 @@ const Checkout = () => {
   });
   const [errors, setErrors] = useState({});
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [isConfirmingOrder, setIsConfirmingOrder] = useState(false);
   const [invoice, setInvoice] = useState(null);
   const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ const Checkout = () => {
   // Place Order
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
+    setIsConfirmingOrder(true)
     setIsPlacingOrder(true);
 
     try {
@@ -99,6 +101,7 @@ const Checkout = () => {
       alert('Failed to place order. Try again.');
     } finally {
       setIsPlacingOrder(false);
+      setIsConfirmingOrder(false);
     }
   };
 
@@ -198,6 +201,15 @@ const Checkout = () => {
       </div>
 
       <Footer />
+
+      {isConfirmingOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="text-white text-lg font-semibold animate-pulse">
+            Confirming your order...
+          </div>
+        </div>
+      )}
+
 
       {/* Invoice Modal */}
       {invoice && (
