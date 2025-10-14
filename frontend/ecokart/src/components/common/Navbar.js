@@ -78,7 +78,7 @@ const Navbar = ({ cartRef }) => {
   const handleLogout = async () => {
   try {
     await toast.promise(
-      axios.post('/api/users/logout', {}, { withCredentials: true }),
+      axios.post('https://ecokart-fet7.onrender.com/api/users/logout', {}, { withCredentials: true }),
       {
         loading: 'Logging out...',
         success: 'Logged out!',
