@@ -48,7 +48,7 @@ const HeroSection = () => {
 
   return (
     <div className="relative w-full font-poppins bg-pageBg overflow-hidden">
-      <div className="relative bg-pageBg md:h-[360px] h-[485px] md:p-4 flex items-center">
+      <div className="relative bg-pageBg md:h-[360px] h-[410px] md:p-4 flex items-center">
 
         {/* Left Arrow */}
         <button
@@ -72,7 +72,7 @@ const HeroSection = () => {
                 <img
                   src={slide.imageUrl}
                   alt={`Slide ${index + 1}`}
-                  className="w-full h-full object-contain md:object-cover transition-transform duration-700 ease-out mx-auto"
+                  className="w-full h-full object-cover md:object-cover transition-transform duration-700 ease-out mx-auto"
                 />
               </a>
             </div>

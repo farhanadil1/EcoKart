@@ -13,7 +13,7 @@ import RewardsCard from '../components/common/RewardsCard'
 
 const Home = () => {
   return (
-    <div>
+    <div className='overflow-hidden'>
       <RotatingBanner/>
       <Navbar />
       <HeroSection />

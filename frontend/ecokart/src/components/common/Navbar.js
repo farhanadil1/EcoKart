@@ -116,7 +116,7 @@ const Navbar = ({ cartRef }) => {
         </div>
 
         {/* Icons + Hamburger */}
-        <div className="flex items-center gap-x-4 text-xl text-[#0d2d1e] relative">
+        <div className="flex scrollbar-hide items-center gap-x-4 text-xl text-[#0d2d1e] relative">
           {/* Search */}
           <div ref={searchRef} className="relative">
             <button
@@ -134,7 +134,7 @@ const Navbar = ({ cartRef }) => {
                   onChange={handleSearch}
                   className="w-full p-2 border text-sm border-gray-400"
                 />
-                <div className="max-h-[22rem] overflow-y-auto">
+                <div className="max-h-[22rem] overflow-y-auto scrollbar-hide">
                   {searched.map((product) => (
                     <Link key={product.id} to={`/product/${product.id}`}>
                       <div className="flex p-1 hover:bg-pageBg text-gray-800 items-center space-x-2">
