@@ -125,7 +125,7 @@ const TrackOrder = () => {
                       <div className="flex-1">
                         <p className="font-medium text-gray-800">{item.name}</p>
                         <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                        <p className="text-sm text-gray-700 font-semibold">₹{item.price * item.quantity * 0.90}</p>
+                        <p className="text-sm text-gray-700 font-semibold">₹{item.price * item.quantity}</p>
                       </div>
                     </div>
                   ))}
