@@ -8,10 +8,9 @@ const desktopSlides = [
 ];
 
 const mobileSlides = [
-  { imageUrl: "./slide4.png", link: "/category/personal care"},
-  { imageUrl: "./slide5.png", link: "/category/skincare" },
-  
-  
+  { imageUrl: "./slide4.png", link: "/category/skincare" },
+  { imageUrl: "./slide5.png", link: "/category/personal care" },
+  { imageUrl: "./slide7.png", link: "/all-products"},
 ];
 
 const HeroSection = () => {
@@ -48,41 +47,43 @@ const HeroSection = () => {
 
   return (
     <div className="relative w-full font-poppins bg-pageBg overflow-hidden">
-      <div className="relative bg-pageBg md:h-[360px] h-[410px] md:p-4 flex items-center">
+      <div className="relative bg-pageBg md:h-[360px] h-[415px] md:p-4 flex items-center">
 
         {/* Left Arrow */}
         <button
           onClick={prevSlide}
-          className="hidden md:flex absolute left-4 z-10 bg-white p-2 rounded-full shadow-lg"
+          className="flex absolute left-2 md:left-4 z-10 bg-white p-2 rounded-full shadow-lg"
         >
           <FiChevronLeft size={24} />
         </button>
 
-        {/* Slide */}
-        <div
-          className="w-full flex transition-transform duration-700"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className="flex-shrink-0 w-full flex justify-center items-center"
-            >
-              <a href={slide.link} className="w-full h-full">
-                <img
-                  src={slide.imageUrl}
-                  alt={`Slide ${index + 1}`}
-                  className="w-full h-full object-cover md:object-cover transition-transform duration-700 ease-out mx-auto"
-                />
-              </a>
-            </div>
-          ))}
+        {/* Slide Container with scrollable fallback */}
+        <div className="w-full overflow-x-auto scrollbar-hide">
+          <div
+            className="flex w-full transition-transform duration-700"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {slides.map((slide, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-full flex justify-center items-center"
+              >
+                <a href={slide.link} className="w-full h-full">
+                  <img
+                    src={slide.imageUrl}
+                    alt={`Slide ${index + 1}`}
+                    className="block w-full h-full object-cover transition-transform duration-700 ease-out mx-auto"
+                  />
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Right Arrow */}
         <button
           onClick={nextSlide}
-          className="hidden md:flex absolute right-4 z-10 bg-white p-2 rounded-full shadow-lg"
+          className="flex absolute right-2 md:right-4 z-10 bg-white p-2 rounded-full shadow-lg"
         >
           <FiChevronRight size={24} />
         </button>
