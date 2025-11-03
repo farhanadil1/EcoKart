@@ -6,26 +6,27 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
 import RewardsCard from '../components/common/RewardsCard';
 import toast from 'react-hot-toast';
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Cart = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [promoCode, setPromoCode] = useState("");
+  
+  // Track which product actions are loading
+  const [loadingItems, setLoadingItems] = useState({}); 
 
   const handleCheckout = () => {
     const userFromCookie = Cookies.get("username");
     if(!userFromCookie){
-      toast.error('Please Login to proceed to checkout.')
-      return navigate('/auth?mode=login')
+      toast.error('Please Login to proceed to checkout.');
+      return navigate('/auth?mode=login');
     }
-    navigate('/checkout')
+    navigate('/checkout');
   }
-  
-  
-  
+
   const {
     cartItems,
-    loading,
     increaseQuantity,
     decreaseQuantity,
     handleRemove,
@@ -38,12 +39,10 @@ const Cart = () => {
     finalTotal,
   } = useCart();
 
-  if (loading) {
-    return (
-      <div className="mt-20 text-center text-xl font-poppins">
-        Loading your cart...
-      </div>
-    );
+  const handleRemoveItem = async (id) => {
+    setLoadingItems(prev => ({ ...prev, [id]: true }));
+    await handleRemove(id);
+    setLoadingItems(prev => ({ ...prev, [id]: false }));
   }
 
   return (
@@ -51,7 +50,6 @@ const Cart = () => {
       <RotatingBanner />
       <Navbar />
       <div className="grid font-poppins mx-10 mt-10 mb-16 grid-cols-1 lg:grid-cols-3">
-        {/* Left Section: Cart Items */}
         <div className="lg:col-span-2">
           <h1 className="text-4xl font-semibold text-[#0d2d1e]">Shopping Cart</h1>
 
@@ -99,22 +97,27 @@ const Cart = () => {
                     <div className="flex flex-wrap justify-center items-center gap-2">
                       <button
                         onClick={() => decreaseQuantity(product._id)}
-                        className="bg-gray-200 px-2 rounded"
-                      >
-                        −
+                        className="bg-gray-200 px-2 rounded flex items-center justify-center"
+                      >                       
+                          −
                       </button>
                       <span>{quantity}</span>
                       <button
                         onClick={() => increaseQuantity(product._id)}
-                        className="bg-gray-200 px-2 rounded"
+                        className="bg-gray-200 px-2 rounded flex items-center justify-center"
                       >
-                        +
+                          +
                       </button>
                       <button
-                        onClick={() => handleRemove(product._id)}
-                        className="text-sm text-red-500 hover:underline"
+                        onClick={() => handleRemoveItem(product._id)}
+                        className="text-sm text-red-500 hover:underline flex items-center"
+                        disabled={loadingItems[product._id]}
                       >
-                        Remove
+                        {loadingItems[product._id] ? (
+                          <AiOutlineLoading3Quarters className="animate-spin text-xs" />
+                        ) : (
+                          "Remove"
+                        )}
                       </button>
                     </div>
 
@@ -130,14 +133,6 @@ const Cart = () => {
                 </div>
               </>
             )}
-          </div>
-
-          <div className='hidden sm:block border border-gray-300 lg:max-w-300 mt-6 h-[100px] lg:h-[180px] shadow rounded'>
-            <img 
-              src='/reward.jpg'
-              alt='coupon'
-              className='object-cover w-full h-full'
-            />
           </div>
         </div>
 
@@ -171,13 +166,12 @@ const Cart = () => {
             )}
             <p className="text-xl font-semibold">Final Total: ₹{finalTotal.toFixed(2)}</p>
 
-            
-              <button 
-                onClick={handleCheckout}
-                className="w-full bg-primary border border-primary text-white py-2 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4">
-                Proceed to Checkout
-              </button>
-            
+            <button 
+              onClick={handleCheckout}
+              className="w-full bg-primary border border-primary text-white py-2 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4"
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import RotatingBanner from '../components/common/RotatingBanner';
 
+const API = process.env.REACT_APP_API_URL;
+
 const TrackOrder = () => {
   const [orderList, setOrderList] = useState([]);
   const [selectedOrderIndex, setSelectedOrderIndex] = useState(null);
@@ -15,11 +17,11 @@ const TrackOrder = () => {
     const fetchOrders = async () => {
       setLoading(true);
       try {
-        const res = await axios.get('https://ecokart-fet7.onrender.com/api/orders/my-orders', {
+        const res = await axios.get(`${API}/orders/my-orders`, {
           withCredentials: true,
         });
         const orders = res.data.data;
-        setOrderList(orders.reverse());
+        setOrderList(orders);
 
         setDeliveryDays(
           orders.map(() => {

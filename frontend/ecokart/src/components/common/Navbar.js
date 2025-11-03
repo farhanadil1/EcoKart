@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import axios from 'axios'
 import toast,{Toaster} from 'react-hot-toast'
 
+const API = process.env.REACT_APP_API_URL;
+
 const bestSellerIds = [19, 13, 7, 2];
 
 const Navbar = ({ cartRef }) => {
@@ -78,7 +80,7 @@ const Navbar = ({ cartRef }) => {
   const handleLogout = async () => {
   try {
     await toast.promise(
-      axios.post('https://ecokart-fet7.onrender.com/api/users/logout', {}, { withCredentials: true }),
+      axios.post(`${API}/users/logout`, {}, { withCredentials: true }),
       {
         loading: 'Logging out...',
         success: 'Logged out!',
@@ -109,7 +111,7 @@ const Navbar = ({ cartRef }) => {
         <div className="hidden md:flex flex-1 justify-center items-center gap-x-6 font-poppins text-xs">
           {menuItems.map((item) => (
             <div key={item.name} className="relative group cursor-pointer">
-              <a href={item.link}>{item.name}</a>
+              <Link to={item.link}>{item.name}</Link>
               <span className="absolute left-0 bottom-[-6px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
             </div>
           ))}

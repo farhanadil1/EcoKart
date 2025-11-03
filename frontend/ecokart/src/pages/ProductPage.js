@@ -19,6 +19,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import CustomAlert from '../components/common/CustomAlert';
 import toast from 'react-hot-toast';
 
+const API = process.env.REACT_APP_API_URL;
 
 const ProductPage = () => {
   const imgRef = useRef(null);
@@ -34,7 +35,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`https://ecokart-fet7.onrender.com/api/products/${id}`,{
+        const res = await axios.get(`${API}/products/${id}`,{
           withCredentials: true
         });
         const productData = res.data.data;
@@ -95,7 +96,7 @@ const ProductPage = () => {
     clone.style.transformOrigin = 'center center';
     clone.style.zIndex = 1000;
     clone.style.pointerEvents = 'none';
-    clone.style.borderRadius = '8px'; // make it match original image
+    clone.style.borderRadius = '8px'; // it match original image
     document.body.appendChild(clone);
 
     const translateX = cartRect.left + cartRect.width/2 - imgRect.left - imgRect.width/2;
@@ -113,38 +114,38 @@ const ProductPage = () => {
   };
 
   const handleAddToCart = async (quantity) => {
+    // immediately show alert and fly animation
+    flyToCart();
+    setAlertMessage(`${quantity} × ${product.name} added to cart`);
+    setTimeout(() => setAlertMessage(''), 3000);
+
+    // Fire backend request in background
     try {
       await axios.post(
-        `https://ecokart-fet7.onrender.com/api/carts/add/${product._id}`,
-        {
-          productId: product._id, // must include productId
-          quantity,
-        },
-        { withCredentials: true } // important to send cookies
+        `${API}/carts/add/${product._id}`,
+        { productId: product._id, quantity },
+        { withCredentials: true }
       );
 
-      flyToCart();
-      setAlertMessage(`${quantity} × ${product.name} added to cart`);
-      setTimeout(() => setAlertMessage(''), 3000);
-
-      fetchCart(); // update context cart
+      fetchCart(); // update context cart after backend confirms
     } catch (error) {
+      toast.error(error)
       console.error('Failed to add product to cart:', error.response?.data || error);
+
       toast((t) => (
         <span className='font-poppins w-fit'>
           Please Login first!
-          
           <button 
-          onClick={handleLoginRedirect}
-          className='ml-2 bg-gray-200 font-medium rounded py-1 px-1' >
+            onClick={handleLoginRedirect}
+            className='ml-2 bg-gray-200 font-medium rounded py-1 px-1' >
             Login
           </button>
         </span>
       ));
-  
-      setTimeout(() => setAlertMessage(''), 2000);
     }
   };
+
+
   const handleLoginRedirect = () => {
     toast.dismiss(); 
     navigate('/auth');
@@ -152,9 +153,9 @@ const ProductPage = () => {
 
   if (loading) {
     return (
-      <div className='grid grid-cols-1 mx-10 font-poppins mt-20 lg:grid-cols-2 gap-8'>
+      <div className='grid grid-cols-1 mx-10 font-poppins mt-32 lg:grid-cols-2 gap-8'>
           <Skeleton height={400} />
-          <div className='space-y-4'>
+          <div className='space-y-8 gap-y-10'>
             <Skeleton height={40} width={`60%`} />
             <Skeleton height={20} width={`40%`} />
             <Skeleton height={20} width={`80%`} />

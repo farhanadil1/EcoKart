@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { DotBackgroundDemo } from '../common/DotBg';
 
+const API = process.env.REACT_APP_API_URL;
 
 const bestSellerIds = ['68e4a1f0d0461a981bc11493',
   '68dfba8075a68a0bf0720670', 
@@ -20,7 +21,7 @@ const BestSeller = () => {
     const fetchBestSellers = async () => {
       setLoading(true);
       try {
-        const res = await axios.get('https://ecokart-fet7.onrender.com/api/products/',{
+        const res = await axios.get(`${API}/products/`,{
 
           withCredentials: true
         });

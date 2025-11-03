@@ -7,7 +7,7 @@ import Footer from '../components/common/Footer';
 import RotatingBanner from '../components/common/RotatingBanner';
 import { IoMdDoneAll } from "react-icons/io";
 
-
+const API = process.env.REACT_APP_API_URL;
 
 const Checkout = () => {
   const { cartItems, subtotal, totalDiscount, taxAmount, shippingFee, finalTotal } = useCart();
@@ -25,7 +25,7 @@ const Checkout = () => {
   const [invoice, setInvoice] = useState(null);
   const navigate = useNavigate();
 
-  const RAZORPAY_KEY_ID = "rzp_test_qDAV8sCeGjU7AR"; // frontend .env
+  const RAZORPAY_KEY_ID = process.env.REACT_APP_RAZORPAY_KEY_ID; // frontend .env
 
   // Handle input change
   const handleChange = (e) => {
@@ -52,7 +52,7 @@ const Checkout = () => {
     try {
       // Step 1: Create Razorpay order on backend
       const orderRes = await axios.post(
-        'https://ecokart-fet7.onrender.com/api/orders/razorpay',
+        `${API}/orders/razorpay`,
         { amount: Math.round(finalTotal) },
         { withCredentials: true }
       );
@@ -70,7 +70,7 @@ const Checkout = () => {
           setIsProcessingPayment(true);
           // Step 3: Confirm order in backend
           const backendRes = await axios.post(
-            'https://ecokart-fet7.onrender.com/api/orders/create',
+            `${API}/orders/create`,
             {
               shippingDetails: {
                 fullName: formData.name,

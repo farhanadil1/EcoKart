@@ -8,6 +8,8 @@ import {toast, Toaster} from 'react-hot-toast'
 import Cookies from 'js-cookie'
 import {showDeveloperMsg} from '../components/common/DeveloperMsg'
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState('')
@@ -17,6 +19,12 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const location = useLocation();
+
+  // Preload the background image
+  useEffect(() => {
+    const img = new Image();
+    img.src = "/bg.png";
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -43,7 +51,7 @@ export default function AuthPage() {
       if (isLogin) {
         //Login API call
         const response = await toast.promise(
-        axios.post('https://ecokart-fet7.onrender.com/api/users/login', {
+        axios.post(`${API}/users/login`, {
           email,
           password,
         },{
@@ -66,7 +74,7 @@ export default function AuthPage() {
       } else {
         //Register API call
         const response = await toast.promise(
-        axios.post('https://ecokart-fet7.onrender.com/api/users/register', {
+        axios.post(`${API}/users/register`, {
           email,
           password,
           fullName,
@@ -98,8 +106,7 @@ export default function AuthPage() {
         <img
           src="/bg.png"
           alt="background"
-          className="w-full h-full object-cover transition-opacity duration-700 opacity-0"
-          onLoad={(e) => e.target.classList.add('opacity-100')}
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black opacity-30" />
       </div>

@@ -9,6 +9,8 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { DotBackgroundDemo } from '../components/common/DotBg';
 
+const API = process.env.REACT_APP_API_URL;
+
 const CategoryPage = () => {
   const [error, setError] = useState();
   const { category } = useParams();
@@ -19,7 +21,7 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('https://ecokart-fet7.onrender.com/api/products',{
+        const res = await axios.get(`${API}/products`,{
           withCredentials: true
         });
         const data = res.data.data || []; 

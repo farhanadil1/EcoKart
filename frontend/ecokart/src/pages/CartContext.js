@@ -3,13 +3,14 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const CartContext = createContext();
+const API = process.env.REACT_APP_API_URL;
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = "https://ecokart-fet7.onrender.com/api/carts";
+  const API_URL = `${API}/carts`;
 
   //Include cookies in all requests
   const axiosConfig = {
@@ -26,7 +27,7 @@ export const CartProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [API_URL]);
 
 
 
@@ -34,33 +35,66 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, [fetchCart]);
 
-  //Add to Cart
+  // Add to Cart
   const addToCart = async (productId, quantity = 1) => {
+    setCartItems(prev => {
+      const existing = prev.find(item => item.product._id === productId);
+      if (existing) {
+        return prev.map(item =>
+          item.product._id === productId
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      } else {
+        return [...prev, { product: { _id: productId, price: 0, name: "Loading...", imageUrl: "" }, quantity }];
+      }
+    });
+
     try {
       await axios.post(`${API_URL}/add/${productId}`, { quantity }, axiosConfig);
-      fetchCart();
+      fetchCart(); // sync with backend
     } catch (error) {
       console.error("Add to cart failed", error);
+      toast.error("Failed to add item to cart.");
+      fetchCart(); // revert if needed
     }
   };
 
-  //Increase
+  // Increase quantity 
   const increaseQuantity = async (productId) => {
+    setCartItems(prev =>
+      prev.map(item =>
+        item.product._id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
+
     try {
       await axios.put(`${API_URL}/increase/product/${productId}`, {}, axiosConfig);
-      fetchCart();
     } catch (error) {
       console.error("Increase failed", error);
+      toast.error("Failed to increase quantity");
+      fetchCart(); // revert
     }
   };
 
-  //Decrease
+  // Decrease quantity 
   const decreaseQuantity = async (productId) => {
+    setCartItems(prev =>
+      prev.map(item =>
+        item.product._id === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+
     try {
       await axios.put(`${API_URL}/decrease/product/${productId}`, {}, axiosConfig);
-      fetchCart();
     } catch (error) {
       console.error("Decrease failed", error);
+      toast.error("Failed to decrease quantity");
+      fetchCart(); // revert
     }
   };
 
