@@ -9,6 +9,7 @@ import OceanImpact from '../components/home/OceanImpact'
 import Reviews from '../components/home/Reviews'
 import Footer from '../components/common/Footer'
 import RewardsCard from '../components/common/RewardsCard'
+import NewArrivals from '../components/common/NewArrivals'
 
 
 const Home = () => {
@@ -17,10 +18,11 @@ const Home = () => {
       <RotatingBanner/>
       <Navbar />
       <HeroSection />
-      <BestSeller />
       <Category />
+      <BestSeller />
       <Free />
       <OceanImpact />
+      <NewArrivals /> 
       <Reviews />
       <div className='mt-2'>
       <RewardsCard />

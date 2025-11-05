@@ -49,6 +49,7 @@ const Cart = () => {
     <div>
       <RotatingBanner />
       <Navbar />
+      <section className='w-full max-w-7xl mx-auto'>
       <div className="grid font-poppins mx-10 mt-10 mb-16 grid-cols-1 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <h1 className="text-4xl font-semibold text-[#0d2d1e]">Shopping Cart</h1>
@@ -178,6 +179,7 @@ const Cart = () => {
       <div className='block sm:hidden '>
         <RewardsCard />
       </div>
+      </section>
 
       <Footer />
     </div>

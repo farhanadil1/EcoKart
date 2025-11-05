@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FiUser, FiSearch, FiShoppingCart, FiMenu, FiX } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-import products from "../../data/products.json";
 import Cookies from "js-cookie";
 import axios from 'axios'
 import toast,{Toaster} from 'react-hot-toast'
 
 const API = process.env.REACT_APP_API_URL;
 
-const bestSellerIds = [19, 13, 7, 2];
-
 const Navbar = ({ cartRef }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searched, setSearched] = useState(
-    products.filter((product) => bestSellerIds.includes(product.id))
-  );
+  const [searched, setSearched] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -23,6 +18,7 @@ const Navbar = ({ cartRef }) => {
 
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
+  const inputRef = useRef(null);
   const navigate = useNavigate();
 
   const menuItems = [
@@ -58,22 +54,17 @@ const Navbar = ({ cartRef }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    if (!query.trim()) {
-      setSearched(products.filter((product) => bestSellerIds.includes(product.id)));
-    } else {
-      const filtered = products.filter(
-        (product) =>
-          product.name.toLowerCase().includes(query.toLowerCase()) ||
-          (product.shortDescription &&
-            product.shortDescription.toLowerCase().includes(query.toLowerCase())) ||
-          (product.description &&
-            product.description.toLowerCase().includes(query.toLowerCase()))
-      );
-      setSearched(filtered);
+    try {
+      const res = await axios.get(`${API}/products/`, {
+        params: { search: query },
+      });
+      setSearched(res.data.data || []);
+    } catch (err) {
+      console.error("Search failed:", err);
     }
   };
 
@@ -100,7 +91,8 @@ const Navbar = ({ cartRef }) => {
 };
 
   return (
-    <nav className="bg-pageBg border-b border-slate-300 px-4 md:px-8 relative z-50">
+    <nav className="bg-pageBg border-b border-slate-300">
+      <div className="px-4 md:px-8 relative z-50 w-full max-w-7xl mx-auto">
       <div className="flex items-center justify-between h-20">
         {/* Brand */}
         <div className="text-3xl font-audiowide text-[#0d2d1e] font-bold">
@@ -122,46 +114,57 @@ const Navbar = ({ cartRef }) => {
           {/* Search */}
           <div ref={searchRef} className="relative">
             <button
-              onClick={() => setIsSearchOpen((prev) => !prev)}
-              className="cursor-pointer"
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                setIsSearchOpen((prev) => !prev);
+                setTimeout(() => inputRef.current?.focus(), 0) //Focus input after open
+              }}
+              className="cursor-pointer focus:outline-none"
             >
               <FiSearch />
             </button>
             {isSearchOpen && (
-              <div className="absolute right-0 mt-2 z-50 w-64 bg-white shadow-lg animate-slide-down">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="w-full p-2 border text-sm border-gray-400"
-                />
+              <div className="absolute right-0 mt-2 z-50 w-72 bg-white shadow-lg animate-slide-down">
+                <div className="p-2 border-b border-gray-300">
+                  <input
+                    ref={inputRef} // connect focus
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full p-2 border border-gray-300 text-sm focus:ring-1 focus:ring-primary focus:outline-none"
+                  />
+                </div>
                 <div className="max-h-[22rem] overflow-y-auto scrollbar-hide">
-                  {searched.map((product) => (
-                    <Link key={product.id} to={`/product/${product.id}`}>
-                      <div className="flex p-1 hover:bg-pageBg text-gray-800 items-center space-x-2">
-                        <img
-                          src={product.imageUrl}
-                          alt={product.name}
-                          className="w-20 h-20 object-cover"
-                          onError={(e) => (e.target.src = "/images/placeholder.png")}
-                        />
-                        <div>
-                          <h2 className="font-medium text-sm w-20 sm:w-full">
-                            {product.name}
-                          </h2>
-                          <h3 className="text-xs">
-                            {product.shortDescription || product.description}
-                          </h3>
+                  {searched.length > 0 ? (
+                    searched.slice(0, 8).map((product) => (
+                      <Link key={product._id} to={`/product/${product._id}`}>
+                        <div className="flex p-2 hover:bg-pageBg text-gray-800 items-center space-x-2 transition-all duration-200">
+                          <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="w-20 h-20 object-cover"
+                            onError={(e) => (e.target.src = "/images/placeholder.png")}
+                          />
+                          <div>
+                            <h2 className="font-medium text-sm w-40 truncate">{product.name}</h2>
+                            <h3 className="text-xs text-gray-600">
+                              {product.shortDescription || product.longDescription}
+                            </h3>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500 py-4 text-sm">
+                      No products found
+                    </p>
+                  )}
                 </div>
               </div>
             )}
           </div>
-
           {/* User Dropdown */}
           <div ref={dropdownRef} className="relative z-50">
             {!isLoggedIn ? (
@@ -232,6 +235,7 @@ const Navbar = ({ cartRef }) => {
           ))}
         </div>
       )}
+      </div>
       <Toaster position="top-center" />
     </nav>
   );

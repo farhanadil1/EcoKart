@@ -12,7 +12,7 @@ const Free = () => {
   }
   return (
     <div className='bg-pageBg font-poppins pt-4 mt-10'>
-        <div className='grid grid-cols-1 md:grid-cols-2'>
+        <div className='w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2'>
             {/*Left Section*/}
             <div className='mt-14 ml-6 lg:ml-14 text-left'>
             <h3 className='bg-primary text-xs w-fit p-1 text-white'>Subscribe & Save</h3>
@@ -38,14 +38,14 @@ const Free = () => {
                     <div className="flex-shrink-0 flex items-center justify-center w-10 h-10 border border-gray-700 rounded-full">
                         <GiSeaTurtle size={24} className="text-primary" />
                     </div>
-                    <p className='text-sm pt-3 lg:pt-0.5'>Recover ocean plastic with every order.</p>
+                    <p className='text-sm pt-3 lg:pt-0.5 items-center'>Recover ocean plastic with every order.</p>
                     </div>
 
                     <div className='flex items-start gap-2'>
                     <div className="flex-shrink-0 flex items-center justify-center w-10 h-10 border border-gray-700 rounded-full">
                         <GiChestnutLeaf size={24} className="text-primary" />
                     </div>
-                    <p className='text-sm pt-3 lg:pt-0.5'>Your purchase helps restore natural habitats.</p>
+                    <p className='text-sm pt-3 lg:pt-0.5 items-center'>Your purchase helps restore natural habitats.</p>
                     </div>
 
             </div>

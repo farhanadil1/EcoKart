@@ -18,6 +18,8 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import CustomAlert from '../components/common/CustomAlert';
 import toast from 'react-hot-toast';
+import Cookies from "js-cookie"
+import NewArrivals from '../components/common/NewArrivals';
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -114,36 +116,48 @@ const ProductPage = () => {
   };
 
   const handleAddToCart = async (quantity) => {
-    // immediately show alert and fly animation
-    flyToCart();
-    setAlertMessage(`${quantity} × ${product.name} added to cart`);
-    setTimeout(() => setAlertMessage(''), 3000);
-
-    // Fire backend request in background
     try {
+      const username = Cookies.get("username");
+
+      if (!username) {
+        toast((t) => (
+          <span className="font-poppins">
+            Please login first!
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                handleLoginRedirect();
+              }}
+              className="ml-2 bg-gray-200 font-medium rounded py-1 px-1"
+            >
+              Login
+            </button>
+          </span>
+        ));
+        return;
+      }
+
+      flyToCart();
+      setAlertMessage(`${quantity} × ${product.name} added to cart`);
+      setTimeout(() => setAlertMessage(""), 3000);
+
       await axios.post(
         `${API}/carts/add/${product._id}`,
         { productId: product._id, quantity },
         { withCredentials: true }
       );
 
-      fetchCart(); // update context cart after backend confirms
+      fetchCart();
     } catch (error) {
-      toast.error(error)
-      console.error('Failed to add product to cart:', error.response?.data || error);
-
-      toast((t) => (
-        <span className='font-poppins w-fit'>
-          Please Login first!
-          <button 
-            onClick={handleLoginRedirect}
-            className='ml-2 bg-gray-200 font-medium rounded py-1 px-1' >
-            Login
-          </button>
-        </span>
-      ));
+      console.error("Failed to add to cart:", error);
+      toast.error(
+        error?.response?.data?.message ||
+        error.message ||
+        "Failed to add item to cart."
+      );
     }
   };
+
 
 
   const handleLoginRedirect = () => {
@@ -153,7 +167,7 @@ const ProductPage = () => {
 
   if (loading) {
     return (
-      <div className='grid grid-cols-1 mx-10 font-poppins mt-32 lg:grid-cols-2 gap-8'>
+      <div className='w-full max-w-7xl min-[1320px]:mx-auto grid grid-cols-1 mx-10 font-poppins mt-32 lg:grid-cols-2 gap-8'>
           <Skeleton height={400} />
           <div className='space-y-8 gap-y-10'>
             <Skeleton height={40} width={`60%`} />
@@ -176,6 +190,7 @@ const ProductPage = () => {
     <div>
       <RotatingBanner />
       <Navbar cartRef={cartRef} />
+      <section className='w-full max-w-7xl mx-auto'>
       <CustomAlert title="Added to Cart" message={alertMessage} onClose={() => setAlertMessage('')} />
 
       <div className='grid grid-cols-1 mx-10 font-poppins mt-20 lg:grid-cols-2'>
@@ -206,8 +221,9 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
-
+      </section>
       <BestSeller />
+      <NewArrivals />
       <Reviews />
       <Free />
       <Footer />

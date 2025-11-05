@@ -85,6 +85,7 @@ const TrackOrder = () => {
     return (
       <div>
         <Navbar />
+        <section className='w-full max-w-7xl mx-auto'>
         <div className="font-poppins mx-6 md:mx-10 mt-20 mb-16 text-center">
           <h1 className="text-3xl font-semibold text-[#0d2d1e] mb-6">Track Your Order</h1>
           <p className="text-gray-600">No order data found. Please place an order first.</p>
@@ -96,6 +97,7 @@ const TrackOrder = () => {
             </Link>
           </div>
         </div>
+        </section>
         <Footer />
       </div>
     );
@@ -104,6 +106,7 @@ const TrackOrder = () => {
     <div>
       <RotatingBanner />
       <Navbar />
+      <section className='w-full max-w-7xl mx-auto'>
       <div className="font-poppins mx-6 md:mx-10 mt-10 mb-16">
         <h1 className="text-4xl font-bold text-[#0d2d1e] mb-10">Track Your Orders</h1>
 
@@ -242,6 +245,7 @@ const TrackOrder = () => {
           </Link>
         </div>
       </div>
+      </section>
       <Footer />
     </div>
   );

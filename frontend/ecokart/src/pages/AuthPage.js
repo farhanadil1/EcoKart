@@ -69,7 +69,7 @@ export default function AuthPage() {
         toast.success(`Welcome back, ${username}!`, { duration: 1500 })
         Cookies.set('username', username, { expires: 7 });
         setTimeout(() => {
-          navigate('/home')
+          navigate(-1)
         }, 1200)
       } else {
         //Register API call

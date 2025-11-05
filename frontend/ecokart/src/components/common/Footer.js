@@ -19,7 +19,9 @@ const Footer = () => {
           <p className="text-sm leading-relaxed text-gray-100">
             Ecokart is your go-to eco-friendly store. From sustainable skincare to biodegradable baby care, shop guilt-free while helping the planet.
           </p>
-          <img src='/logo.png' alt='logo' width={150} height={150}  />
+          <div className="text-3xl mt-4 font-audiowide text-pageBg font-bold">
+          <a href="/">EcoKart</a>
+        </div>
         </div>
 
         {/* Quick Links */}

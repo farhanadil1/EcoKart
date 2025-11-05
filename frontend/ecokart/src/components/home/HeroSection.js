@@ -49,7 +49,7 @@ const HeroSection = () => {
 
   return (
     <div className="relative w-full font-poppins bg-pageBg overflow-hidden">
-      <div className="relative md:h-[360px] h-[415px] md:p-4 flex items-center">
+      <div className="relative min-[1780px]:h-[480px] min-[1890px]:h-[550px] md:h-[360px] h-[415px] md:p-4 flex items-center">
 
         {/* Left Arrow */}
         <button
