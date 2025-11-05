@@ -4,12 +4,31 @@ import { ApiResponse } from '../utils/ApiResponse.js';
 import { Product } from '../models/product.models.js';
 import { uploadToCloudinary } from '../utils/cloudinary.js'
 
-const getAllProducts = asyncHandler( async (req, res) => {
-    const products = await Product.find({})
-    return res
+const getAllProducts = asyncHandler(async (req, res) => {
+  const { search } = req.query;
+  let query = {};
+  // If ?search is provided, build a MongoDB regex filter
+  if (search) {
+    query = {
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { shortDescription: { $regex: search, $options: "i" } },
+        { longDescription: { $regex: search, $options: "i" } },
+      ],
+    };
+  }
+  // Fetch products based on query (all or filtered)
+  const products = await Product.find(query);
+  return res
     .status(200)
     .json(
-        new ApiResponse(200, products, 'All products fetched succesfully')
+      new ApiResponse(
+        200,
+        products,
+        search
+          ? `Products matching '${search}' fetched successfully`
+          : "All products fetched successfully"
+      )
     )
 })
 
