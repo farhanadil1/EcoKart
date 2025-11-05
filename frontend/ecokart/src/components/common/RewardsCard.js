@@ -31,7 +31,7 @@ const RewardsCard = () => {
             viewport={{ once: true, amount: 0.3 }}
           >
             <img 
-              src='./rewardscreen.png'
+              src='../rewardscreen.png'
               alt='rewards'
               className='w-full max-w-sm sm:max-w-md lg:max-w-full h-auto'
             />

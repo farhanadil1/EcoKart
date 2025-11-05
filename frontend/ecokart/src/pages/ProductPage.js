@@ -20,7 +20,7 @@ import CustomAlert from '../components/common/CustomAlert';
 import toast from 'react-hot-toast';
 import Cookies from "js-cookie"
 import NewArrivals from '../components/common/NewArrivals';
-
+import RewardsCard  from '../components/common/RewardsCard'
 const API = process.env.REACT_APP_API_URL;
 
 const ProductPage = () => {
@@ -224,8 +224,9 @@ const ProductPage = () => {
       </section>
       <BestSeller />
       <NewArrivals />
-      <Reviews />
       <Free />
+      <Reviews />
+      <RewardsCard />
       <Footer />
     </div>
   );
