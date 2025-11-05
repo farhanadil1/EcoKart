@@ -9,14 +9,22 @@ const getAllProducts = asyncHandler(async (req, res) => {
   let query = {};
   // If ?search is provided, build a MongoDB regex filter
   if (search) {
+    const searchRegex = new RegExp(search, "i"); // case-insensitive regex
+
     query = {
-      $or: [
-        { name: { $regex: search, $options: "i" } },
-        { shortDescription: { $regex: search, $options: "i" } },
-        { longDescription: { $regex: search, $options: "i" } },
-      ],
+        $or: [
+        { name: searchRegex },
+        { category: searchRegex },
+        { shortDescription: searchRegex },
+        { longDescription: searchRegex },
+        { "specification.netQuantity": searchRegex },
+        { "specification.shelfLife": searchRegex },
+        { "specification.countryOfOrigin": searchRegex },
+        { "specification.usageInstructions": searchRegex },
+        ],
     };
-  }
+    }
+
   // Fetch products based on query (all or filtered)
   const products = await Product.find(query);
   return res
