@@ -18,9 +18,7 @@ export function DotBackgroundDemo({ children }) {
       />
 
       {/* Content goes on top */}
-      <div className="relative z-10 w-full h-full">
-        {children}
-      </div>
+      <div className="relative z-10 w-full h-full">{children}</div>
     </div>
   );
 }

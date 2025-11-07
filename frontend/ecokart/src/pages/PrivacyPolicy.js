@@ -27,7 +27,8 @@ const PrivacyPolicy = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="max-w-2xl mx-auto text-lg text-gray-600"
           >
-            Your privacy is important to us. This policy explains how EcoKart collects, uses, and protects your personal information.
+            Your privacy is important to us. This policy explains how EcoKart
+            collects, uses, and protects your personal information.
           </motion.p>
         </section>
 
@@ -44,9 +45,18 @@ const PrivacyPolicy = () => {
             </motion.h2>
 
             <ul className="list-disc list-inside space-y-3 text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
-              <li>Personal information such as your name, email, address, and payment details.</li>
-              <li>Information you provide when creating an account, placing an order, or contacting us.</li>
-              <li>Automatic information like IP address, browser type, and browsing behavior on our website.</li>
+              <li>
+                Personal information such as your name, email, address, and
+                payment details.
+              </li>
+              <li>
+                Information you provide when creating an account, placing an
+                order, or contacting us.
+              </li>
+              <li>
+                Automatic information like IP address, browser type, and
+                browsing behavior on our website.
+              </li>
             </ul>
           </section>
         </DotBackgroundDemo>
@@ -64,8 +74,14 @@ const PrivacyPolicy = () => {
             </motion.h2>
 
             <ul className="list-decimal list-inside space-y-3 text-gray-600 text-lg leading-relaxed">
-              <li>To process orders and provide you with products and services efficiently.</li>
-              <li>To communicate updates, promotions, and relevant information about your account.</li>
+              <li>
+                To process orders and provide you with products and services
+                efficiently.
+              </li>
+              <li>
+                To communicate updates, promotions, and relevant information
+                about your account.
+              </li>
               <li>To improve our website, products, and user experience.</li>
               <li>To ensure security and prevent fraud.</li>
             </ul>
@@ -85,18 +101,26 @@ const PrivacyPolicy = () => {
             </motion.h2>
 
             <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed mb-4">
-              EcoKart does not sell, trade, or rent your personal information to third parties. We may share data with trusted service providers only for the purposes of fulfilling your orders or improving our services.
+              EcoKart does not sell, trade, or rent your personal information to
+              third parties. We may share data with trusted service providers
+              only for the purposes of fulfilling your orders or improving our
+              services.
             </p>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
-              We implement industry-standard security measures to protect your data from unauthorized access, alteration, disclosure, or destruction.
+              We implement industry-standard security measures to protect your
+              data from unauthorized access, alteration, disclosure, or
+              destruction.
             </p>
           </section>
         </DotBackgroundDemo>
 
         <section className="bg-primary text-white text-center py-16 px-6 rounded-t-3xl">
-          <h2 className="text-3xl font-semibold mb-3">Stay Protected with EcoKart</h2>
+          <h2 className="text-3xl font-semibold mb-3">
+            Stay Protected with EcoKart
+          </h2>
           <p className="max-w-2xl mx-auto mb-6 text-lg opacity-90">
-            Your trust is our priority. Shop with confidence knowing your information is safe.
+            Your trust is our priority. Shop with confidence knowing your
+            information is safe.
           </p>
           <a
             href="/all-products"

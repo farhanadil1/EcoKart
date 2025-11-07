@@ -1,79 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import RotatingBanner from '../components/common/RotatingBanner';
-import Navbar from '../components/common/Navbar';
-import Footer from '../components/common/Footer';
-import Free from '../components/common/Free';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
-import { DotBackgroundDemo } from '../components/common/DotBg';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import RotatingBanner from "../components/common/RotatingBanner";
+import Navbar from "../components/common/Navbar";
+import Footer from "../components/common/Footer";
+import Free from "../components/common/Free";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { DotBackgroundDemo } from "../components/common/DotBg";
+import { getAccessToken } from "../utils/auth";
 
 const API = process.env.REACT_APP_API_URL;
 
 const AllProductsPage = () => {
   const [error, setError] = useState();
   const [products, setProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [priceRange, setPriceRange] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [priceRange, setPriceRange] = useState("All");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get(`${API}/products/`,{
-        withCredentials: true
-      });
-      const data = res.data.data;
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`${API}/products/`, {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`
+          }
+        });
+        const data = res.data.data;
 
-      const mappedProducts = data.map(prod => ({
-        id: prod._id,
-        name: prod.name,
-        category: prod.category,
-        shortDescription: prod.shortDescription,
-        longDescription: prod.longDescription,
-        priceINR: Number(prod.price),
-        imageUrl: prod.imageUrl,
-        rating: Number(prod.rating),
-        reviewsCount: Number(prod.reviews),
-      }));
+        const mappedProducts = data.map((prod) => ({
+          id: prod._id,
+          name: prod.name,
+          category: prod.category,
+          shortDescription: prod.shortDescription,
+          longDescription: prod.longDescription,
+          priceINR: Number(prod.price),
+          imageUrl: prod.imageUrl,
+          rating: Number(prod.rating),
+          reviewsCount: Number(prod.reviews)
+        }));
 
-      setProducts(mappedProducts);
-      setLoading(false);
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-      setError("Server down")
-      setLoading(false);
-    }
-  };
+        setProducts(mappedProducts);
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+        setError("Server down");
+        setLoading(false);
+      }
+    };
 
-  fetchProducts();
-}, []);
-
+    fetchProducts();
+  }, []);
 
   const getFilteredProducts = () => {
-    return products.filter(product => {
+    return products.filter((product) => {
       const categoryMatch =
-        selectedCategory === 'All' ||
-        product.category.trim().toLowerCase() === selectedCategory.toLowerCase();
+        selectedCategory === "All" ||
+        product.category.trim().toLowerCase() ===
+          selectedCategory.toLowerCase();
 
       const price = Number(product.priceINR);
       let priceMatch = false;
 
       switch (priceRange) {
-        case 'under-500':
+        case "under-500":
           priceMatch = price > 0 && price <= 500;
           break;
-        case 'under-1000':
+        case "under-1000":
           priceMatch = price > 500 && price <= 1000;
           break;
-        case 'under-1500':
+        case "under-1500":
           priceMatch = price > 1000 && price <= 1500;
           break;
-        case 'over-1500':
+        case "over-1500":
           priceMatch = price > 1500;
           break;
-        case 'All':
+        case "All":
         default:
           priceMatch = true;
       }
@@ -83,32 +87,35 @@ const AllProductsPage = () => {
   };
 
   const filteredProducts = getFilteredProducts();
-  const categories = ['All', ...new Set(products.map(p => p.category))];
+  const categories = ["All", ...new Set(products.map((p) => p.category))];
 
   const handleCategoryClick = (category) => setSelectedCategory(category);
   const handlePriceChange = (e) => setPriceRange(e.target.value);
-  
-  if(error){
-    return <div>
-      
-      <RotatingBanner />
-      <Navbar />
-      <DotBackgroundDemo>
-      <h2 className="text-3xl font-semibold md:pr-4 pb-6 pt-10 text-center text-[#0d2d1e]">
-          Our Products
-        </h2>
-      <div className='flex justify-center'>
-      <img
-        src='./serverdown.png'
-        alt='server is down!'
-        className='h-35 w-60'
-      />
-    </div>
-    <p className='flex justify-center px-4 text-sm pb-8 text-gray-500'>We're currently experiencing technical difficulties. Please try again later.</p>
-    </DotBackgroundDemo>
-    <Footer />
-    </div>
 
+  if (error) {
+    return (
+      <div>
+        <RotatingBanner />
+        <Navbar />
+        <DotBackgroundDemo>
+          <h2 className="text-3xl font-semibold md:pr-4 pb-6 pt-10 text-center text-[#0d2d1e]">
+            Our Products
+          </h2>
+          <div className="flex justify-center">
+            <img
+              src="./serverdown.png"
+              alt="server is down!"
+              className="h-35 w-60"
+            />
+          </div>
+          <p className="flex justify-center px-4 text-sm pb-8 text-gray-500">
+            We're currently experiencing technical difficulties. Please try
+            again later.
+          </p>
+        </DotBackgroundDemo>
+        <Footer />
+      </div>
+    );
   }
 
   return (
@@ -118,53 +125,59 @@ const AllProductsPage = () => {
 
       <section className="w-full max-w-7xl mx-auto">
         <div className="py-10 px-4 md:px-8 font-poppins">
-        <h2 className="text-3xl font-semibold md:pr-4 mb-6 text-center text-[#0d2d1e]">
-          Our Products
-        </h2>
+          <h2 className="text-3xl font-semibold md:pr-4 mb-6 text-center text-[#0d2d1e]">
+            Our Products
+          </h2>
 
-        {/* Filter Controls */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
-          <div className="flex items-center gap-2">
-            <label htmlFor="category-filter" className="text-gray-700 w-fit font-semibold">
-              Category:
-            </label>
-            <select
-              id="category-filter"
-              value={selectedCategory}
-              onChange={(e) => handleCategoryClick(e.target.value)}
-              className="py-1 px-2 text-xs sm:text-sm rounded border border-gray-200"
-            >
-              {[...new Set(categories)].map(category => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+          {/* Filter Controls */}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="category-filter"
+                className="text-gray-700 w-fit font-semibold"
+              >
+                Category:
+              </label>
+              <select
+                id="category-filter"
+                value={selectedCategory}
+                onChange={(e) => handleCategoryClick(e.target.value)}
+                className="py-1 px-2 text-xs sm:text-sm rounded border border-gray-200"
+              >
+                {[...new Set(categories)].map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center font-roboto gap-2">
+              <label
+                htmlFor="price-filter"
+                className="text-gray-700 text-sm sm:text-base font-semibold"
+              >
+                Price:
+              </label>
+              <select
+                id="price-filter"
+                value={priceRange}
+                onChange={handlePriceChange}
+                className="py-1 px-2 text-xs sm:text-sm rounded border border-gray-200"
+              >
+                <option value="All">All</option>
+                <option value="under-500">Under ₹500</option>
+                <option value="under-1000">₹500 - ₹1000</option>
+                <option value="under-1500">₹1000 - ₹1500</option>
+                <option value="over-1500">Over ₹1500</option>
+              </select>
+            </div>
           </div>
 
-          <div className="flex items-center font-roboto gap-2">
-            <label htmlFor="price-filter" className="text-gray-700 text-sm sm:text-base font-semibold">
-              Price:
-            </label>
-            <select
-              id="price-filter"
-              value={priceRange}
-              onChange={handlePriceChange}
-              className="py-1 px-2 text-xs sm:text-sm rounded border border-gray-200"
-            >
-              <option value="All">All</option>
-              <option value="under-500">Under ₹500</option>
-              <option value="under-1000">₹500 - ₹1000</option>
-              <option value="under-1500">₹1000 - ₹1500</option>
-              <option value="over-1500">Over ₹1500</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Products Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {loading
-            ? Array.from({ length: 8 }).map((_, index) => (
+          {/* Products Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {loading ? (
+              Array.from({ length: 8 }).map((_, index) => (
                 <div key={index} className="p-4 gap-4 mt-2">
                   <Skeleton height={270} />
                   <Skeleton height={20} width={`80%`} className="mt-4" />
@@ -172,9 +185,12 @@ const AllProductsPage = () => {
                   <Skeleton height={40} width={`100%`} className="mt-4" />
                 </div>
               ))
-            : filteredProducts.length > 0
-            ? filteredProducts.map(product => (
-                <div key={product.id} className="transition duration-300 gap-4 p-4 mt-2">
+            ) : filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="transition duration-300 gap-4 p-4 mt-2"
+                >
                   <div className="flex flex-col justify-between h-full">
                     <div className="overflow-hidden">
                       <Link to={`/product/${product.id}`}>
@@ -192,9 +208,13 @@ const AllProductsPage = () => {
                           </Link>
                         </h3>
                       </div>
-                      <p className="text-sm text-gray-500 mt-2">{product.shortDescription}</p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        {product.shortDescription}
+                      </p>
                     </div>
-                    <p className="text-primary font-roleway font-bold mt-2">₹{product.priceINR.toFixed(2)}</p>
+                    <p className="text-primary font-roleway font-bold mt-2">
+                      ₹{product.priceINR.toFixed(2)}
+                    </p>
                     <Link
                       to={`/product/${product.id}`}
                       className="bg-primary border-[1.5px] border-primary mt-4 text-white hover:bg-white hover:border-[1.5px] hover:border-primary hover:text-black transition duration-300 w-full p-2 text-center"
@@ -204,8 +224,10 @@ const AllProductsPage = () => {
                   </div>
                 </div>
               ))
-            : <p>No products found with the selected filters.</p>}
-        </div>
+            ) : (
+              <p>No products found with the selected filters.</p>
+            )}
+          </div>
         </div>
       </section>
 

@@ -6,7 +6,7 @@ const RotatingBanner = () => {
     "New eco-friendly products just arrived",
     "Subscribe & get 10% off your first order",
     "Sustainable shopping made easy",
-    "Buy 2 products get 1 gift free",
+    "Buy 2 products get 1 gift free"
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);

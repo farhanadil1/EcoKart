@@ -4,7 +4,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 const desktopSlides = [
   { imageUrl: "./slide1.jpg", link: "/category/baby care" },
   { imageUrl: "./slide2.jpg", link: "/category/skincare" },
-  { imageUrl: "./slide3.jpg", link: "/category/personal care" },
+  { imageUrl: "./slide3.jpg", link: "/category/personal care" }
 ];
 
 const mobileSlides = [
@@ -12,7 +12,7 @@ const mobileSlides = [
   { imageUrl: "./slide5.png", link: "/category/personal care" },
   { imageUrl: "./slide6.png", link: "/category/household" },
   { imageUrl: "./slide8.png", link: "/category/baby care" },
-  { imageUrl: "./slide7.png", link: "/all-products"},
+  { imageUrl: "./slide7.png", link: "/all-products" }
 ];
 
 const HeroSection = () => {
@@ -50,7 +50,6 @@ const HeroSection = () => {
   return (
     <div className="relative w-full font-poppins bg-pageBg overflow-hidden">
       <div className="relative min-[1780px]:h-[480px] min-[1890px]:h-[550px] md:h-[360px] h-[415px] md:p-4 flex items-center">
-
         {/* Left Arrow */}
         <button
           onClick={prevSlide}

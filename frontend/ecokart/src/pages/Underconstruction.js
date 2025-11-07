@@ -1,5 +1,5 @@
 // src/pages/UnderConstruction.jsx
-import React from 'react';
+import React from "react";
 
 const UnderConstruction = () => {
   return (
@@ -9,12 +9,17 @@ const UnderConstruction = () => {
         alt="Under Construction"
         className="w-72 md:w-96 mb-8"
       />
-      <h1 className=" animate-bounce text-4xl font-bold text-gray-800 mb-4">404: Feature Not Found</h1>
+      <h1 className=" animate-bounce text-4xl font-bold text-gray-800 mb-4">
+        404: Feature Not Found
+      </h1>
       <p className="text-lg text-gray-600 mb-6">
-       But I’m working on it, promise. Just me, a keyboard, and a lot of coffee ☕
+        But I’m working on it, promise. Just me, a keyboard, and a lot of coffee
+        ☕
       </p>
-      
-      <div className="text-lg rounded-md px-3 py-2 bg-yellow-100 font-semibold hover:-translate-y-1/4 text-yellow-400"><a href='/home'>Get Back to Home</a></div>
+
+      <div className="text-lg rounded-md px-3 py-2 bg-yellow-100 font-semibold hover:-translate-y-1/4 text-yellow-400">
+        <a href="/home">Get Back to Home</a>
+      </div>
     </div>
   );
 };

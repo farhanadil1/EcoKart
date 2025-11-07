@@ -43,7 +43,9 @@ const TermsOfService = () => {
               Acceptance of Terms
             </motion.h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
-              By accessing or using EcoKart services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree, please do not use our services.
+              By accessing or using EcoKart services, you agree to be bound by
+              these Terms of Service and all applicable laws and regulations. If
+              you do not agree, please do not use our services.
             </p>
           </section>
         </DotBackgroundDemo>
@@ -60,10 +62,19 @@ const TermsOfService = () => {
               User Responsibilities
             </motion.h2>
             <ul className="list-disc list-inside space-y-3 text-gray-600 text-lg leading-relaxed">
-              <li>Provide accurate, current, and complete information when creating an account.</li>
+              <li>
+                Provide accurate, current, and complete information when
+                creating an account.
+              </li>
               <li>Maintain the confidentiality of your account credentials.</li>
-              <li>Ensure that your use of EcoKart services complies with all applicable laws.</li>
-              <li>Do not use our platform for any fraudulent or harmful activities.</li>
+              <li>
+                Ensure that your use of EcoKart services complies with all
+                applicable laws.
+              </li>
+              <li>
+                Do not use our platform for any fraudulent or harmful
+                activities.
+              </li>
             </ul>
           </section>
         </GridBackgroundDemo>
@@ -80,10 +91,14 @@ const TermsOfService = () => {
               Orders & Payments
             </motion.h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed mb-4">
-              All orders placed on EcoKart are subject to product availability and confirmation. Prices and availability may change without notice.
+              All orders placed on EcoKart are subject to product availability
+              and confirmation. Prices and availability may change without
+              notice.
             </p>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
-              Payments must be completed through our secure payment methods. EcoKart is not responsible for unauthorized transactions outside our platform.
+              Payments must be completed through our secure payment methods.
+              EcoKart is not responsible for unauthorized transactions outside
+              our platform.
             </p>
           </section>
         </DotBackgroundDemo>
@@ -100,15 +115,20 @@ const TermsOfService = () => {
               Limitation of Liability
             </motion.h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
-              EcoKart shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of our services. We do not guarantee uninterrupted access to our platform or products.
+              EcoKart shall not be liable for any direct, indirect, incidental,
+              or consequential damages arising from your use of our services. We
+              do not guarantee uninterrupted access to our platform or products.
             </p>
           </section>
         </GridBackgroundDemo>
 
         <section className="bg-primary text-white text-center py-16 px-6 rounded-t-3xl">
-          <h2 className="text-3xl font-semibold mb-3">Shop Confidently with EcoKart</h2>
+          <h2 className="text-3xl font-semibold mb-3">
+            Shop Confidently with EcoKart
+          </h2>
           <p className="max-w-2xl mx-auto mb-6 text-lg opacity-90">
-            By using our platform, you agree to our Terms of Service. Enjoy safe and sustainable shopping.
+            By using our platform, you agree to our Terms of Service. Enjoy safe
+            and sustainable shopping.
           </p>
           <a
             href="/all-products"

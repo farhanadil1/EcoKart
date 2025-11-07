@@ -1,13 +1,14 @@
-import { useParams, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import RotatingBanner from '../components/common/RotatingBanner';
-import Navbar from '../components/common/Navbar';
-import Footer from '../components/common/Footer';
-import Free from '../components/common/Free';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
-import { DotBackgroundDemo } from '../components/common/DotBg';
+import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import RotatingBanner from "../components/common/RotatingBanner";
+import Navbar from "../components/common/Navbar";
+import Footer from "../components/common/Footer";
+import Free from "../components/common/Free";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { DotBackgroundDemo } from "../components/common/DotBg";
+import { getAccessToken } from "../utils/auth";
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -21,14 +22,17 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`${API}/products`,{
-          withCredentials: true
+        const res = await axios.get(`${API}/products`, {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`
+          }
         });
-        const data = res.data.data || []; 
+        const data = res.data.data || [];
         setProducts(data);
       } catch (error) {
-        console.error('Failed to fetch products:', error);
-        setError('server down')
+        console.error("Failed to fetch products:", error);
+        setError("server down");
         setProducts([]);
       } finally {
         setLoading(false);
@@ -37,7 +41,7 @@ const CategoryPage = () => {
 
     fetchProducts();
   }, []);
-  
+
   // Filter products by category from URL param
   const filteredProducts = products.filter(
     (p) =>
@@ -49,30 +53,34 @@ const CategoryPage = () => {
   const toTitleCase = (str) =>
     str
       .toLowerCase()
-      .split(' ')
+      .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .join(" ");
 
-  if(error){
-    return <div className='font-poppins'>
-      <RotatingBanner />
-      <Navbar />
-      <DotBackgroundDemo>
-      <h2 className="text-3xl font-semibold md:pr-4 mb-6 pt-10 text-center text-[#0d2d1e]">
-          {toTitleCase(category)}
-        </h2>
-      <div className='flex justify-center'>
-      <img
-        src='../serverdown.png'
-        alt='server is down!'
-        className='h-35 w-60'
-      />
-    </div>
-    <p className='flex justify-center text-sm pb-8 px-8 text-gray-500'>We're currently experiencing technical difficulties. Please try again later.</p>
-    </DotBackgroundDemo>
-    <Footer />
-    </div>
-
+  if (error) {
+    return (
+      <div className="font-poppins">
+        <RotatingBanner />
+        <Navbar />
+        <DotBackgroundDemo>
+          <h2 className="text-3xl font-semibold md:pr-4 mb-6 pt-10 text-center text-[#0d2d1e]">
+            {toTitleCase(category)}
+          </h2>
+          <div className="flex justify-center">
+            <img
+              src="../serverdown.png"
+              alt="server is down!"
+              className="h-35 w-60"
+            />
+          </div>
+          <p className="flex justify-center text-sm pb-8 px-8 text-gray-500">
+            We're currently experiencing technical difficulties. Please try
+            again later.
+          </p>
+        </DotBackgroundDemo>
+        <Footer />
+      </div>
+    );
   }
 
   return (
@@ -81,15 +89,15 @@ const CategoryPage = () => {
       <Navbar />
 
       <section className="w-full max-w-7xl mx-auto">
-        <div className='py-10 px-4 md:px-8 bg-white font-poppins'>
-        <h2 className="text-3xl font-semibold md:pr-4 mb-6 text-center text-[#0d2d1e]">
-          {toTitleCase(category)}
-        </h2>
+        <div className="py-10 px-4 md:px-8 bg-white font-poppins">
+          <h2 className="text-3xl font-semibold md:pr-4 mb-6 text-center text-[#0d2d1e]">
+            {toTitleCase(category)}
+          </h2>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Skeleton Loading */}
-          {loading
-            ? Array.from({ length: 8 }).map((_, index) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Skeleton Loading */}
+            {loading ? (
+              Array.from({ length: 8 }).map((_, index) => (
                 <div key={index} className="p-4 gap-4 mt-2">
                   <Skeleton height={270} />
                   <Skeleton height={20} width="80%" className="mt-4" />
@@ -97,10 +105,9 @@ const CategoryPage = () => {
                   <Skeleton height={40} width="100%" className="mt-4" />
                 </div>
               ))
-
-            // Products Grid
-            : filteredProducts.length > 0
-            ? filteredProducts.map((product) => (
+            ) : // Products Grid
+            filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
                 <div
                   key={product._id}
                   className="transition duration-300 gap-4 p-4 mt-2"
@@ -138,14 +145,14 @@ const CategoryPage = () => {
                   </div>
                 </div>
               ))
-
-            // Empty state
-            : (
+            ) : (
+              // Empty state
               <p className="col-span-full text-center text-gray-600">
-                No products found in <strong>{toTitleCase(category)}</strong> category.
+                No products found in <strong>{toTitleCase(category)}</strong>{" "}
+                category.
               </p>
             )}
-        </div>
+          </div>
         </div>
       </section>
 
