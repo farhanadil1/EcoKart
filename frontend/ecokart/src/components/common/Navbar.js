@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { getAccessToken } from "../../utils/auth";
+import { getAccessToken } from "../../utils/auth.js";
 
 const API = process.env.REACT_APP_API_URL;
 
