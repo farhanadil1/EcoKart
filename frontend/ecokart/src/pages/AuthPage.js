@@ -52,18 +52,15 @@ export default function AuthPage() {
         const response = await toast.promise(
           axios.post(
             `${API}/users/login`,
-            { email, password, username },
+            { email, password },
             { withCredentials: true }
           ),
           { loading: "Logging in..." }
         );
 
         const { accessToken, refreshToken, user } = response.data.data;
-        const username = user.username;
-
-        // username for UI
-        Cookies.set("username", username, { expires: 7 });
-
+        const loggedInUsername = user.username;
+        Cookies.set("username", loggedInUsername, { expires: 7 });
         //iOS cookie test
         Cookies.set("iosTest", "yes", { sameSite: "None", secure: true });
         const cookiesWorking = Cookies.get("iosTest") === "yes";
@@ -81,7 +78,7 @@ export default function AuthPage() {
           });
         }
 
-        toast.success(`Welcome back, ${username}!`);
+        toast.success(`Welcome back, ${loggedInUsername}!`);
         navigate(-1);
       } 
       else {
@@ -99,7 +96,6 @@ export default function AuthPage() {
         );
 
         setIsLogin(true);
-        setFormData({ fullName: "", email: "", password: "" });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong!");
