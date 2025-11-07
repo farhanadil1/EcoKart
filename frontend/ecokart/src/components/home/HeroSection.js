@@ -17,7 +17,9 @@ const mobileSlides = [
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+
+  //initial isMobile detection
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
 
   const slides = isMobile ? mobileSlides : desktopSlides;
 
@@ -26,7 +28,9 @@ const HeroSection = () => {
   };
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) =>
+      prev === slides.length - 1 ? 0 : prev + 1
+    );
   }, [slides]);
 
   // Auto slide every 7 seconds
@@ -37,19 +41,21 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, [nextSlide]);
 
-  // Detect screen size
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint
+      setIsMobile(window.innerWidth < 768);
     };
-    handleResize(); // Initial check
+
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [slides]);
+
+  }, []); // 
 
   return (
     <div className="relative w-full font-poppins bg-pageBg overflow-hidden">
       <div className="relative min-[1780px]:h-[480px] min-[1890px]:h-[550px] md:h-[360px] h-[415px] md:p-4 flex items-center">
+        
         {/* Left Arrow */}
         <button
           onClick={prevSlide}
@@ -58,7 +64,7 @@ const HeroSection = () => {
           <FiChevronLeft size={24} />
         </button>
 
-        {/* Slide Container with scrollable fallback */}
+        {/* Slide Container */}
         <div className="w-full scrollbar-hide">
           <div
             className="flex w-full transition-transform duration-700"
@@ -90,7 +96,7 @@ const HeroSection = () => {
         </button>
       </div>
 
-      {/* Dots Indicator */}
+      {/* Dots */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {slides.map((_, idx) => (
           <div
