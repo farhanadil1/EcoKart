@@ -49,45 +49,43 @@ export default function AuthPage() {
 
     try {
       if (isLogin) {
-        //Login API call
         const response = await toast.promise(
           axios.post(
             `${API}/users/login`,
-            {
-              email,
-              password
-            },
-            {
-              withCredentials: true
-            }
+            { email, password, username },
+            { withCredentials: true }
           ),
-          {
-            loading: "Logging in..."
-          }
+          { loading: "Logging in..." }
         );
-
-        console.log("Login success:", response.data);
 
         const { accessToken, refreshToken, user } = response.data.data;
         const username = user.username;
+
+        // username for UI
         Cookies.set("username", username, { expires: 7 });
-        // if cookies working
-        document.cookie = "iosTest=yes; SameSite=None; Secure";
-        const cookiesWorking = document.cookie.includes("iosTest=yes");
+
+        //iOS cookie test
+        Cookies.set("iosTest", "yes", { sameSite: "None", secure: true });
+        const cookiesWorking = Cookies.get("iosTest") === "yes";
 
         if (!cookiesWorking) {
-          // iOS fallback: save tokens in localStorage
+          //iOS Safari fallback
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
         } else {
-          //normal browsers
-          Cookies.set("accessToken", accessToken, { expires: 7 });
+          //Desktop / Chrome / Android
+          Cookies.set("accessToken", accessToken, {
+            expires: 7,
+            sameSite: "None",
+            secure: true
+          });
         }
-        toast.success(`Welcome back, ${username}!`, { duration: 1500 });
+
+        toast.success(`Welcome back, ${username}!`);
         navigate(-1);
-      } else {
-        //Register API call
-        const response = await toast.promise(
+      } 
+      else {
+        await toast.promise(
           axios.post(`${API}/users/register`, {
             email,
             password,
@@ -95,17 +93,15 @@ export default function AuthPage() {
             username
           }),
           {
-            loading: "Signing Up",
-            success: "User Registered Successfully,Try to Login."
+            loading: "Signing Up...",
+            success: "User Registered! Please Login."
           }
         );
-        console.log("Registration success:", response.data);
-        setTimeout(() => {
-          navigate("/auth?mode=login");
-        }, 1200);
+
+        setIsLogin(true);
+        setFormData({ fullName: "", email: "", password: "" });
       }
     } catch (error) {
-      console.error("Auth error:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || "Something went wrong!");
     } finally {
       setLoading(false);

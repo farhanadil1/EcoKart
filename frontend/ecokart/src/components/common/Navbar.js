@@ -91,6 +91,11 @@ const Navbar = ({ cartRef }) => {
 
       // Clear cookies and state after successful logout
       Cookies.remove("username");
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
       setIsLoggedIn(false);
       setShowDropdown(false);
       navigate("/home");
