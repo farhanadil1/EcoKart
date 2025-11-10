@@ -11,7 +11,7 @@ const Free = () => {
     navigate("/auth");
   };
   return (
-    <div className="bg-pageBg font-poppins pt-4 mt-10">
+    <div className="bg-pageBg font-poppins pt-4 mt-10 overflow-hidden">
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2">
         {/*Left Section*/}
         <div className="mt-14 ml-6 lg:ml-14 text-left">

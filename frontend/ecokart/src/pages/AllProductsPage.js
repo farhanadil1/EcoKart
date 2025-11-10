@@ -123,8 +123,8 @@ const AllProductsPage = () => {
       <RotatingBanner />
       <Navbar />
 
-      <section className="w-full max-w-7xl mx-auto">
-        <div className="py-10 px-4 md:px-8 font-poppins">
+      <section className="w-full max-w-7xl mx-auto overflow-hidden">
+        <div className="py-10 px-4 md:px-8 font-poppins overflow-hidden">
           <h2 className="text-3xl font-semibold md:pr-4 mb-6 text-center text-[#0d2d1e]">
             Our Products
           </h2>
@@ -197,7 +197,7 @@ const AllProductsPage = () => {
                         <img
                           src={product.imageUrl}
                           alt={product.name}
-                          className="w-full h-auto md:w-[300px] md:h-[270px] object-fill transition-transform duration-300 hover:scale-105"
+                          className="w-full max-w-full h-auto md:w-[300px] md:h-[270px] object-fill transition-transform duration-300 hover:scale-105"
                         />
                       </Link>
                       <div className="relative group cursor-pointer">
@@ -231,7 +231,7 @@ const AllProductsPage = () => {
         </div>
       </section>
 
-      <Free className="-mb-10" />
+      <Free />
       <Footer />
     </div>
   );

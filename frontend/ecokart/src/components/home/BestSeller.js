@@ -80,7 +80,7 @@ const BestSeller = () => {
     <section className="bg-white w-full max-w-7xl mx-auto">
       <div className="py-10 px-4 md:px-8">
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-semibold md:pr-4 font-poppins mb-3 text-[#0d2d1e]">
+          <h2 className="text-2xl md:text-3xl font-semibold md:pr-4 font-poppins mb-3 text-[#0d2d1e]">
             Our Best Sellers
           </h2>
           <Link to={`/all-products`}>

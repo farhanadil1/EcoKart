@@ -14,15 +14,15 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* About Ecokart */}
         <div>
-          <h3 className="text-xl font-bold mb-3">About Ecokart</h3>
+          <div className="text-3xl mb-4 font-audiowide text-pageBg font-bold">
+            <a href="/">EcoKart</a>
+          </div>
+          <h3 className="text-xl font-bold mb-2">About Ecokart</h3>
           <p className="text-sm leading-relaxed text-gray-100">
             Ecokart is your go-to eco-friendly store. From sustainable skincare
             to biodegradable baby care, shop guilt-free while helping the
             planet.
           </p>
-          <div className="text-3xl mt-4 font-audiowide text-pageBg font-bold">
-            <a href="/">EcoKart</a>
-          </div>
         </div>
 
         {/* Quick Links */}
