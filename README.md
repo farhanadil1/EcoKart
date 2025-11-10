@@ -222,7 +222,7 @@ I’d be happy to connect and discuss it!
 📧 imfarhan574@gmail.com
 
 🔗 Live Frontend: https://ecokart-adil-farhan.netlify.app
-> ⚠️ **Note:** Some cookie-related login issues may occur on **iOS devices**. A fix will be deployed soon.
+
 
 🌐 GitHub: [farhanadil1](https://github.com/farhanadil1/)
 
