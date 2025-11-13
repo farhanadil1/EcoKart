@@ -106,7 +106,7 @@ const Navbar = ({ cartRef }) => {
 
   return (
     <nav className="bg-pageBg border-b border-slate-300">
-      <div className="px-4 md:px-8 relative z-50 w-full max-w-7xl mx-auto">
+      <div className="px-4 md:px-8 relative z-50 w-full">
         <div className="flex items-center justify-between h-20">
           {/* Brand */}
           <div className="text-3xl font-audiowide text-[#0d2d1e] font-bold">
