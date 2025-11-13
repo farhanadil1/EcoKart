@@ -48,8 +48,20 @@ const BestSeller = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-40 mt-14">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
+      <div>
+        <div className="flex justify-between items-center py-10 px-4 md:px-8">
+          <h2 className="text-2xl md:text-3xl font-semibold md:pr-4 font-poppins mb-3 text-[#0d2d1e]">
+            Our Best Sellers
+          </h2>
+          <Link to={`/all-products`}>
+            <p className="pr-2 mb-3 font-poppins hover:text-blue-500 text-xs font-medium hover:underline transition-all duration-200">
+              See All
+            </p>
+          </Link>
+        </div>
+        <div className="flex justify-center items-center h-40 mt-14">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
+        </div>
       </div>
     );
   }
@@ -84,7 +96,7 @@ const BestSeller = () => {
             Our Best Sellers
           </h2>
           <Link to={`/all-products`}>
-            <p className="pr-2 font-poppins hover:text-blue-500 text-xs font-medium hover:underline transition-all duration-200">
+            <p className="pr-2 mb-3 font-poppins hover:text-blue-500 text-xs font-medium hover:underline transition-all duration-200">
               See All
             </p>
           </Link>

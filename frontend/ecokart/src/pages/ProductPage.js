@@ -72,7 +72,7 @@ const ProductPage = () => {
         setTimeout(() => {
           setProduct(mappedProduct);
           setLoading(false);
-        }, 1000);
+        }, 700);
       } catch (error) {
         console.error("Failed to fetch product:", error);
         setProduct(null);
@@ -174,21 +174,47 @@ const ProductPage = () => {
   };
 
   if (loading) {
-    return (
-      <div className="w-full max-w-7xl min-[1320px]:mx-auto grid grid-cols-1 mx-10 font-poppins mt-32 lg:grid-cols-2 gap-8">
-        <Skeleton height={400} />
-        <div className="space-y-8 gap-y-10">
-          <Skeleton height={40} width={`60%`} />
-          <Skeleton height={20} width={`40%`} />
-          <Skeleton height={20} width={`80%`} />
-          <Skeleton height={20} width={`90%`} />
-          <Skeleton height={30} width={`50%`} />
-          <Skeleton height={50} width={`70%`} />
-          <Skeleton height={200} width={`100%`} />
+  return (
+    <div className="max-w-7xl mx-auto  font-poppins">
+      <RotatingBanner />
+      <Navbar cartRef={cartRef} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 px-6 lg:px-8 md:mt-20 mt-12 gap-10">
+        {/* LEFT: IMAGE SKELETON */}
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-md">
+            <Skeleton
+              height={420}
+              className="rounded-lg sm:h-[400px] md:h-[450px]"
+            />
+          </div>
+        </div>
+        {/* RIGHT: PRODUCT DETAILS SKELETON */}
+        <div className="space-y-5">
+          <Skeleton height={32} width={"70%"} />
+          <div className="flex items-center space-x-3">
+            <Skeleton height={20} width={60} />
+            <Skeleton height={20} width={80} />
+          </div>
+          <Skeleton height={20} width={"90%"} />
+          <Skeleton height={20} width={"95%"} />
+          <Skeleton height={20} width={"85%"} />
+          <Skeleton height={30} width={"60%"} />
+          <Skeleton height={45} width={"40%"} />
+          <Skeleton height={55} width={"50%"} />
+          <div className="pt-4 space-y-3">
+            <Skeleton height={25} width={"50%"} />
+            <Skeleton height={20} width={"80%"} />
+            <Skeleton height={20} width={"70%"} />
+            <Skeleton height={20} width={"75%"} />
+            <Skeleton height={20} width={"65%"} />
+          </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+
 
   if (!product) {
     return <p>Product Not Found.</p>;
@@ -205,16 +231,16 @@ const ProductPage = () => {
           onClose={() => setAlertMessage("")}
         />
 
-        <div className="grid grid-cols-1 mx-10 font-poppins mt-20 lg:grid-cols-2">
+        <div className="grid grid-cols-1 mx-10 font-poppins mt-12 md:mt-20 lg:grid-cols-2">
           <div className="mb-10">
             <img
               ref={imgRef}
               src={product.imageUrl}
               alt={product.name}
-              className="lg:ml-10"
+              className="lg:ml-6"
             />
           </div>
-          <div className="mb-10">
+          <div className="mb-10 lg:pr-6">
             <h1 className="text-4xl font-normal">{product.name}</h1>
             <p className="mt-4 flex">
               {product.rating}
