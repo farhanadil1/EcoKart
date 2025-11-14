@@ -57,7 +57,7 @@ const NewArrivals = () => {
             </p>
           </Link>
         </div>
-        <div className="flex justify-center items-center h-40 mt-14">
+        <div className="flex justify-center items-center h-40 -mt-4">
           <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
         </div>
       </div>
