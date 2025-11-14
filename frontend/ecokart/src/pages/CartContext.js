@@ -16,6 +16,7 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadingItems, setLoadingItems] = useState({});
 
   const API_URL = `${API}/carts`;
 
@@ -136,11 +137,24 @@ export const CartProvider = ({ children }) => {
 
   //Remove
   const handleRemove = async (productId) => {
+    // Start spinner
+    setLoadingItems((prev) => ({ ...prev, [productId]: true }));
+
     try {
+      await new Promise((resolve) => setTimeout(resolve, 200)); // small delay for spinner
       await axios.delete(`${API_URL}/remove/product/${productId}`, axiosConfig);
+      // Remove item from UI after delay
+      setCartItems((prev) =>
+        prev.filter((item) => item.product._id !== productId)
+      );
       fetchCart();
     } catch (error) {
       console.error("Remove failed", error);
+      // Even if API fails, refresh cart so UI stays correct
+      fetchCart();
+    } finally {
+      // Stop spinner
+      setLoadingItems((prev) => ({ ...prev, [productId]: false }));
     }
   };
 
@@ -175,7 +189,10 @@ export const CartProvider = ({ children }) => {
   const totalDiscount = baseDiscountAmount + promoDiscountAmount;
 
   const taxAmount = subtotal * 0.05;
-  const shippingFee = subtotal > 500 ? 0 : 40;
+  let shippingFee = 0;
+  if (subtotal > 0 && subtotal <= 500) {
+    shippingFee = 40;
+  }
 
   const finalTotal = subtotal - totalDiscount + taxAmount + shippingFee;
 
@@ -196,7 +213,8 @@ export const CartProvider = ({ children }) => {
         taxAmount,
         shippingFee,
         finalTotal,
-        fetchCart // manual refresh
+        fetchCart, // manual refresh
+        loadingItems
       }}
     >
       {children}

@@ -180,13 +180,21 @@ const Cart = () => {
               <p className="text-xl font-semibold">
                 Final Total: ₹{finalTotal.toFixed(2)}
               </p>
-
-              <button
-                onClick={handleCheckout}
-                className="w-full bg-primary border border-primary text-white py-2 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4"
-              >
-                Proceed to Checkout
-              </button>
+              {cartItems.length > 0 ? (
+                <button
+                  onClick={handleCheckout}
+                  className="w-full bg-primary border border-primary text-white py-2 rounded hover:bg-white hover:border hover:border-primary hover:text-primary mt-4"
+                >
+                  Proceed to Checkout
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="w-full bg-primary/80 border border-gray-300 text-white py-2 rounded cursor-not-allowed mt-4"
+                >
+                  Proceed to Checkout
+                </button>
+              )}
             </div>
           </div>
         </div>
