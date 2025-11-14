@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const category = [
   {
@@ -42,13 +43,13 @@ const Category = () => {
             >
               <div className="flex flex-col justify-between h-full items-center">
                 <div className="overflow-hidden w-full md:w-[260px] md:h-[200px]">
-                  <a href={cat.link}>
+                  <Link to={cat.link} >
                     <img
                       src={cat.img}
                       alt={cat.name}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-y-90 origin-top"
                     />
-                  </a>
+                 </Link>
                 </div>
 
                 <div className="mt-4 cursor-pointer">

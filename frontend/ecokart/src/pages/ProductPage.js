@@ -72,7 +72,7 @@ const ProductPage = () => {
         setTimeout(() => {
           setProduct(mappedProduct);
           setLoading(false);
-        }, 700);
+        }, 5);
       } catch (error) {
         console.error("Failed to fetch product:", error);
         setProduct(null);
@@ -174,47 +174,45 @@ const ProductPage = () => {
   };
 
   if (loading) {
-  return (
-    <div className="max-w-7xl mx-auto  font-poppins">
-      <RotatingBanner />
-      <Navbar cartRef={cartRef} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 px-6 lg:px-8 md:mt-20 mt-12 gap-10">
-        {/* LEFT: IMAGE SKELETON */}
-        <div className="w-full flex justify-center">
-          <div className="w-full max-w-md">
-            <Skeleton
-              height={420}
-              className="rounded-lg sm:h-[400px] md:h-[450px]"
-            />
+    return (
+      <div className="max-w-7xl mx-auto  font-poppins">
+        <RotatingBanner />
+        <Navbar cartRef={cartRef} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 px-6 lg:px-8 md:mt-20 mt-12 gap-10">
+          {/* LEFT: IMAGE SKELETON */}
+          <div className="w-full flex justify-center">
+            <div className="w-full max-w-md">
+              <Skeleton
+                height={420}
+                className="rounded-lg sm:h-[400px] md:h-[450px]"
+              />
+            </div>
           </div>
-        </div>
-        {/* RIGHT: PRODUCT DETAILS SKELETON */}
-        <div className="space-y-5">
-          <Skeleton height={32} width={"70%"} />
-          <div className="flex items-center space-x-3">
-            <Skeleton height={20} width={60} />
-            <Skeleton height={20} width={80} />
-          </div>
-          <Skeleton height={20} width={"90%"} />
-          <Skeleton height={20} width={"95%"} />
-          <Skeleton height={20} width={"85%"} />
-          <Skeleton height={30} width={"60%"} />
-          <Skeleton height={45} width={"40%"} />
-          <Skeleton height={55} width={"50%"} />
-          <div className="pt-4 space-y-3">
-            <Skeleton height={25} width={"50%"} />
-            <Skeleton height={20} width={"80%"} />
-            <Skeleton height={20} width={"70%"} />
-            <Skeleton height={20} width={"75%"} />
-            <Skeleton height={20} width={"65%"} />
+          {/* RIGHT: PRODUCT DETAILS SKELETON */}
+          <div className="space-y-5">
+            <Skeleton height={32} width={"70%"} />
+            <div className="flex items-center space-x-3">
+              <Skeleton height={20} width={60} />
+              <Skeleton height={20} width={80} />
+            </div>
+            <Skeleton height={20} width={"90%"} />
+            <Skeleton height={20} width={"95%"} />
+            <Skeleton height={20} width={"85%"} />
+            <Skeleton height={30} width={"60%"} />
+            <Skeleton height={45} width={"40%"} />
+            <Skeleton height={55} width={"50%"} />
+            <div className="pt-4 space-y-3">
+              <Skeleton height={25} width={"50%"} />
+              <Skeleton height={20} width={"80%"} />
+              <Skeleton height={20} width={"70%"} />
+              <Skeleton height={20} width={"75%"} />
+              <Skeleton height={20} width={"65%"} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-
+    );
+  }
 
   if (!product) {
     return <p>Product Not Found.</p>;
@@ -259,13 +257,26 @@ const ProductPage = () => {
             </p>
             <PriceTag product={product} />
             <QuantitySelector onAddToCart={handleAddToCart} />
-            <div className="mt-8 border-t border-gray-400">
-              <h3 className="text-lg font-medium mt-4">Specifications</h3>
-              {Object.entries(product.specifications).map(([key, val]) => (
-                <p key={key}>
-                  {key} - {val}
-                </p>
-              ))}
+            <div className="mt-8 border-t border-gray-400 pt-4">
+              <h3 className="text-lg font-medium mb-3">Specifications</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full border border-gray-300 rounded-lg">
+                  <tbody>
+                    {Object.entries(product.specifications).map(
+                      ([key, val]) => (
+                        <tr key={key} className="border-b border-gray-300">
+                          <td className="px-3 py-2 font-medium text-gray-700 w-1/3">
+                            {key}
+                          </td>
+                          <td className="px-3 border-l border-gray-300 py-2 text-gray-600">
+                            {val}
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

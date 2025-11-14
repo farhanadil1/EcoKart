@@ -14,11 +14,11 @@ export default function PriceTag({ product }) {
       </div>
       <div className="mt-6 flex items-center">
         <div className="text-xl text-black">MRP</div>
-        <div className="text-lg text-gray-400 line-through ml-4">
-          <LuIndianRupee className="inline" />
+        <div className="text-md flex sm:text-lg text-gray-400 line-through sm:ml-4 ml-2">
+          <LuIndianRupee className="inline mt-1 sm:mt-0" />
           {mrp.toFixed(2)}
         </div>
-        <div className="text-2xl font-semibold flex text-black ml-4">
+        <div className="text-2xl font-semibold flex text-black sm:ml-4 ml-2">
           <LuIndianRupee className="mt-1" />
           {discounted}
         </div>
