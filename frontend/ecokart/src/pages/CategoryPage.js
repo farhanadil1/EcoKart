@@ -87,7 +87,6 @@ const CategoryPage = () => {
     <div>
       <RotatingBanner />
       <Navbar />
-
       <section className="w-full max-w-7xl mx-auto">
         <div className="py-10 px-4 md:px-8 bg-white font-poppins">
           <h2 className="text-3xl font-semibold md:pr-4 mb-6 text-center text-[#0d2d1e]">
