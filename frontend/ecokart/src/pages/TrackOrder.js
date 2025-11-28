@@ -84,6 +84,7 @@ const TrackOrder = () => {
   if (loading) {
     return (
       <div>
+        <RotatingBanner />
         <Navbar />
         <div className="flex justify-center items-center h-40 mt-14">
           <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary"></div>
@@ -96,6 +97,7 @@ const TrackOrder = () => {
   if (orderList.length === 0) {
     return (
       <div>
+        <RotatingBanner />
         <Navbar />
         <section className="w-full max-w-7xl mx-auto">
           <div className="font-poppins mx-6 md:mx-10 mt-20 mb-16 text-center">

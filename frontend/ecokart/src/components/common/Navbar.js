@@ -16,6 +16,9 @@ const Navbar = ({ cartRef }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
 
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -103,6 +106,8 @@ const Navbar = ({ cartRef }) => {
       console.error(err);
     }
   };
+
+  
 
   return (
     <nav className="bg-pageBg border-b border-slate-300">
